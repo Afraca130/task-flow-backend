@@ -1,5 +1,5 @@
-import { IRepository, IRepositoryOptions } from '@libs/interfaces/repository.interface';
-import { IService } from '@libs/interfaces/service.interface';
+import { IRepository, IRepositoryOptions } from '@src/common/interfaces/repository.interface';
+import { IService } from '@src/common/interfaces/service.interface';
 import { Injectable } from '@nestjs/common';
 import { ObjectLiteral, DeepPartial } from 'typeorm';
 

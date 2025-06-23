@@ -1,5 +1,5 @@
-import { PaginationMetaDto } from '@libs/dtos/paginate-response.dto';
-import { ErrorResponseDto, BaseResponseDto } from '@libs/dtos/response.dto';
+import { PaginationMetaDto } from '@src/common/dtos/paginate-response.dto';
+import { ErrorResponseDto, BaseResponseDto } from '@src/common/dtos/response.dto';
 import { applyDecorators } from '@nestjs/common';
 import { ApiBadRequestResponse, getSchemaPath, ApiResponse, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
