@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { DomainUserService } from '@src/domain/user/user.service';
 import { RegisterDto } from '@src/dtos.index';
-import * as bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class RegisterUsecase {

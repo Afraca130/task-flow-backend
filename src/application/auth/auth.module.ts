@@ -11,7 +11,7 @@ import { GetTokenUsecase } from './usecases/get-token.usecase';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
-    imports: [PassportModule, DomainUserModule, TypeOrmModule.forFeature([User])],
+    imports: [PassportModule, DomainUserModule],
     providers: [AuthService, RegisterUsecase, LoginUseCase, JwtStrategy, GetTokenUsecase],
     controllers: [AuthController],
     exports: [JwtStrategy],

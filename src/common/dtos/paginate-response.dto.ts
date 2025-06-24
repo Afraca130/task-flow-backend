@@ -26,11 +26,11 @@ export class PaginationMetaDto {
     limit?: number;
 
     @ApiPropertyOptional({
-        description: '다음 페이지 존재 여부',
-        type: Boolean,
-        example: true,
+        description: '총 페이지',
+        type: Number,
+        example: 5,
     })
-    hasNext?: boolean;
+    totalPages?: number;
 }
 
 /**
@@ -41,7 +41,7 @@ export class PaginationData<T> {
         description: '결과 아이템 배열',
         isArray: true,
     })
-    items: T[];
+    data: T[];
 
     @ApiProperty({
         description: '페이지네이션 메타데이터',

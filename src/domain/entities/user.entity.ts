@@ -1,5 +1,6 @@
 import { Base } from '@src/common/entity/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+import { Project } from './project.entity';
 
 @Entity()
 export class User extends Base {
@@ -20,4 +21,7 @@ export class User extends Base {
 
     @Column({ default: null })
     lastLoginAt: Date;
+
+    @OneToMany(() => Project, (project) => project.owner)
+    projects: Project[];
 }

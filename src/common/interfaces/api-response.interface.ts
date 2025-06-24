@@ -2,12 +2,12 @@ export interface PaginationMeta {
     total: number;
     page?: number;
     limit?: number;
-    hasNext?: boolean;
-  }
-  
-  export interface ApiResponse<T> {
+    totalPages?: number;
+}
+
+export interface ApiResponse<T> {
     success: boolean;
+    message: string;
     data: T;
-    message?: string;
-    meta?: PaginationMeta;
-  } 
+    meta?: PaginationMeta | Record<string, any>; // 더 명확한 타입
+}

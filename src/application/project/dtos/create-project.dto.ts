@@ -1,0 +1,65 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsOptional, IsBoolean, IsEnum, IsDateString, MaxLength } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { ApprovalType } from '@src/common/enums/approval-type.enum';
+
+export class CreateProjectDto {
+    @ApiProperty({
+        description: '프로젝트 이름',
+        example: '새로운 프로젝트',
+        maxLength: 100,
+    })
+    @IsString({ message: '프로젝트 이름은 문자열이어야 합니다.' })
+    @IsNotEmpty({ message: '프로젝트 이름은 필수입니다.' })
+    @MaxLength(100, { message: '프로젝트 이름은 100자를 초과할 수 없습니다.' })
+    @Transform(({ value }) => value?.trim())
+    name: string;
+
+    @ApiPropertyOptional({
+        description: '프로젝트 설명',
+        example: '이 프로젝트는 ...',
+        maxLength: 1000,
+    })
+    @IsOptional()
+    @IsString({ message: '프로젝트 설명은 문자열이어야 합니다.' })
+    @MaxLength(1000, { message: '프로젝트 설명은 1000자를 초과할 수 없습니다.' })
+    @Transform(({ value }) => value?.trim())
+    description?: string;
+
+    @ApiPropertyOptional({
+        description: '프로젝트 공개 여부',
+        example: false,
+        default: false,
+    })
+    @IsOptional()
+    @IsBoolean({ message: '공개 여부는 boolean 값이어야 합니다.' })
+    isPublic?: boolean = false;
+
+    @ApiPropertyOptional({
+        description: '프로젝트 시작일',
+        example: '2024-01-01',
+        format: 'date',
+    })
+    @IsOptional()
+    @IsDateString({}, { message: '시작일은 유효한 날짜 형식이어야 합니다.' })
+    startDate?: string;
+
+    @ApiPropertyOptional({
+        description: '프로젝트 종료일',
+        example: '2024-12-31',
+        format: 'date',
+    })
+    @IsOptional()
+    @IsDateString({}, { message: '종료일은 유효한 날짜 형식이어야 합니다.' })
+    endDate?: string;
+
+    @ApiPropertyOptional({
+        description: '승인 방식',
+        example: ApprovalType.AUTO,
+        enum: ApprovalType,
+        default: ApprovalType.AUTO,
+    })
+    @IsOptional()
+    @IsEnum(ApprovalType, { message: '승인 방식은 AUTO 또는 MANUAL이어야 합니다.' })
+    approvalType?: ApprovalType = ApprovalType.AUTO;
+}

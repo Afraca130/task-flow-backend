@@ -7,11 +7,14 @@ import { ApiResponse } from '../interfaces/api-response.interface';
 export class ResponseInterceptor<T> implements NestInterceptor<T, ApiResponse<T>> {
     intercept(context: ExecutionContext, next: CallHandler): Observable<ApiResponse<T>> {
         return next.handle().pipe(
-            map((data): ApiResponse<T> => {
+            map((result): ApiResponse<T> => {
+                const hasDataProperty = result && typeof result === 'object' && 'data' in result;
+
                 return {
                     success: true,
-                    data: data as T,
                     message: '요청이 성공적으로 처리되었습니다.',
+                    data: hasDataProperty ? result.data : result,
+                    ...(result.meta && { meta: result.meta }),
                 };
             }),
         );

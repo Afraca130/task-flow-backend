@@ -1,10 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginDto, RegisterDto } from '@src/dtos.index';
-import { RegisterUsecase } from './usecases/register.usecase';
-import { LoginResponseDto } from './dtos/login-response.dto';
-import { GetTokenUsecase } from './usecases/get-token.usecase';
-import { LoginUseCase } from './usecases/login.usecase';
-import { UserDto } from './dtos/user-response.dto';
+import { Injectable } from '@nestjs/common';
+import { RegisterUsecase, LoginUseCase, GetTokenUsecase } from './usecases';
+import { LoginDto, RegisterDto, LoginResponseDto, UserDto } from '@src/dtos.index';
 
 @Injectable()
 export class AuthService {

@@ -8,6 +8,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConfig } from './common/configs/jwt.config';
 import { AuthModule } from './application/auth/auth.module';
+import { ProjectModule } from './application/project/project.module';
 
 @Module({
     imports: [
@@ -27,6 +28,7 @@ import { AuthModule } from './application/auth/auth.module';
         }),
         TerminusModule,
         AuthModule,
+        ProjectModule,
     ],
     controllers: [AppController],
     providers: [AppService],
