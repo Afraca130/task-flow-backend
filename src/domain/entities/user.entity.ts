@@ -1,5 +1,5 @@
 import { Base } from '@src/common/entity/base.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class User extends Base {
@@ -13,8 +13,11 @@ export class User extends Base {
     name: string;
 
     @Column({ default: '#000000' })
-    color: string;
+    profileColor: string;
 
     @Column({ default: true })
     isActive: boolean;
+
+    @Column({ default: null })
+    lastLoginAt: Date;
 }

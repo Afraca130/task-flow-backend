@@ -15,8 +15,17 @@ export class DomainUserService extends BaseService<User> {
         return this.userRepository.save(user);
     }
 
-    async findUserByEmail(email: string) {
+    async findUserByEmail(email: string): Promise<User> {
         const user = await this.userRepository.findOne({ where: { email } });
         return user;
+    }
+
+    async findById(id: string): Promise<User> {
+        const user = await this.userRepository.findOne({ where: { id } });
+        return user;
+    }
+
+    async updateLastLoginAt(id: string, lastLoginAt: Date): Promise<void> {
+        await this.userRepository.update(id, { lastLoginAt });
     }
 }
