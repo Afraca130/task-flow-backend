@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConfig } from './common/configs/jwt.config';
 import { AuthModule } from './application/auth/auth.module';
 import { ProjectModule } from './application/project/project.module';
+import { InvitationModule } from './application/invitation/invitation.module';
 
 @Module({
     imports: [
@@ -29,6 +30,7 @@ import { ProjectModule } from './application/project/project.module';
         TerminusModule,
         AuthModule,
         ProjectModule,
+        InvitationModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -2,7 +2,7 @@ import { ApiDataResponse } from '@src/common/decorators/api-response.decorator';
 import { Public } from '@src/common/decorators/pulic.decorator';
 import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiBody, ApiConflictResponse, ApiBadRequestResponse } from '@nestjs/swagger';
-import { RegisterDto } from '@src/dtos.index';
+import { RegisterDto } from '@src/application/auth/dtos';
 import { LoginDto } from '../dtos/login.dto';
 import { LoginResponseDto } from '../dtos/login-response.dto';
 import { UserDto } from '../dtos/user-response.dto';

@@ -3,7 +3,7 @@ import { DateUtil } from '@src/common/utils/date.util';
 import { DomainProjectService } from '@src/domain/project/project.service';
 import { v4 as uuidv4 } from 'uuid';
 import { plainToInstance } from 'class-transformer';
-import { CreateProjectDto, ProjectResponseDto } from '@src/dtos.index';
+import { CreateProjectDto, ProjectResponseDto } from '@src/application/project/dtos';
 
 @Injectable()
 export class CreateProjectUseCase {

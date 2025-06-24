@@ -25,7 +25,12 @@ import {
 import { JwtAuthGuard } from '@src/common/guards/jwt-auth.guard';
 import { User } from '@src/common/decorators/user.decorator';
 import { ApiDataResponse, ApiPaginatedResponse } from '@src/common/decorators/api-response.decorator';
-import { CreateProjectDto, UpdateProjectDto, ProjectResponseDto, GetPaginatedProjectQueryDto } from '@src/dtos.index';
+import {
+    CreateProjectDto,
+    UpdateProjectDto,
+    ProjectResponseDto,
+    GetPaginatedProjectQueryDto,
+} from '@src/application/project/dtos';
 import { ProjectService } from '../project.service';
 import { ErrorResponseDto } from '@src/common/dtos/response.dto';
 import { DeleteResult } from 'typeorm';

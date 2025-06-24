@@ -1,8 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '@src/domain/entities/user.entity';
 import { BaseService } from '@src/common/services/base.service';
 import { DomainUserRepository } from './user.repository';
-import { RegisterDto } from '@src/dtos.index';
+import { RegisterDto } from '@src/application/auth/dtos';
 
 @Injectable()
 export class DomainUserService extends BaseService<User> {

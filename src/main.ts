@@ -8,7 +8,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { RolesGuard } from './common/guards/role.guard';
 import { ErrorInterceptor } from './common/interceptors/error.interceptor';
-import * as dtos from './dtos.index';
+import * as dtos from './common/dtos';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);

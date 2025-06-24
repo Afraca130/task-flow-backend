@@ -8,7 +8,7 @@ import {
 import { DomainProjectService } from '@src/domain/project/project.service';
 import { plainToInstance } from 'class-transformer';
 import { DateUtil } from '@src/common/utils/date.util';
-import { UpdateProjectDto, ProjectResponseDto } from '@src/dtos.index';
+import { UpdateProjectDto, ProjectResponseDto } from '@src/application/project/dtos';
 
 @Injectable()
 export class UpdateProjectUseCase {

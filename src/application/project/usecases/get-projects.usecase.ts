@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DomainProjectService } from '@src/domain/project/project.service';
-import { ProjectResponseDto } from '@src/dtos.index';
+import { ProjectResponseDto } from '@src/application/project/dtos';
 import { plainToInstance } from 'class-transformer';
 import { GetPaginatedProjectQueryDto } from '../dtos/get-paginated-project.query.dto';
 import { IRepositoryOptions } from '@src/common/interfaces/repository.interface';

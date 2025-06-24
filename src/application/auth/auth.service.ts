@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RegisterUsecase, LoginUseCase, GetTokenUsecase } from './usecases';
-import { LoginDto, RegisterDto, LoginResponseDto, UserDto } from '@src/dtos.index';
+import { LoginDto, RegisterDto, LoginResponseDto, UserDto } from '@src/application/auth/dtos';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()

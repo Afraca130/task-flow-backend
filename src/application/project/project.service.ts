@@ -7,7 +7,12 @@ import {
     GetProjectsUseCase,
     UpdateProjectUseCase,
 } from './usecases';
-import { CreateProjectDto, GetPaginatedProjectQueryDto, ProjectResponseDto, UpdateProjectDto } from '@src/dtos.index';
+import {
+    CreateProjectDto,
+    GetPaginatedProjectQueryDto,
+    ProjectResponseDto,
+    UpdateProjectDto,
+} from '@src/application/project/dtos';
 import { DeleteResult } from 'typeorm';
 
 @Injectable()
