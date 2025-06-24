@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RegisterUsecase, LoginUseCase, GetTokenUsecase } from './usecases';
 import { LoginDto, RegisterDto, LoginResponseDto, UserDto } from '@src/dtos.index';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +21,7 @@ export class AuthService {
 
         return {
             accessToken,
-            user: UserDto.fromEntity(user),
+            user: plainToInstance(UserDto, user),
         };
     }
 }

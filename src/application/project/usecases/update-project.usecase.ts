@@ -55,8 +55,7 @@ export class UpdateProjectUseCase {
 
             return plainToInstance(ProjectResponseDto, project);
         } catch (error) {
-            console.log(error);
-            throw new BadRequestException('프로젝트 수정에 실패했습니다.');
+            throw new BadRequestException('프로젝트 수정에 실패했습니다.', { cause: error });
         }
     }
 }

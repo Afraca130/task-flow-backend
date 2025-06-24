@@ -1,6 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger/dist';
-import { DateUtil } from '@src/common/utils/date.util';
-import { User } from '@src/domain/entities/user.entity';
+import { Exclude } from 'class-transformer';
 
 export class UserDto {
     @ApiProperty({
@@ -10,10 +9,25 @@ export class UserDto {
     id: string;
 
     @ApiProperty({
+        description: '계정 생성 시간',
+        example: '2023-12-01T12:00:00.000Z',
+    })
+    createdAt: string;
+
+    @ApiProperty({
+        description: '수정 시간',
+        example: '2023-12-01T12:00:00.000Z',
+    })
+    updatedAt: string;
+
+    @ApiProperty({
         description: '이메일 주소',
         example: 'user@example.com',
     })
     email: string;
+
+    @Exclude()
+    password: string;
 
     @ApiProperty({
         description: '사용자 이름',
@@ -38,22 +52,4 @@ export class UserDto {
         example: '2023-12-01T12:00:00.000Z',
     })
     lastLoginAt?: string;
-
-    @ApiProperty({
-        description: '계정 생성 시간',
-        example: '2023-12-01T12:00:00.000Z',
-    })
-    createdAt: string;
-
-    static fromEntity(user: User): UserDto {
-        return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            profileColor: user.profileColor,
-            createdAt: DateUtil.toISOString(user.createdAt),
-            isActive: user.isActive,
-            lastLoginAt: user.lastLoginAt ? DateUtil.toISOString(user.lastLoginAt) : undefined,
-        };
-    }
 }

@@ -27,8 +27,7 @@ export class DeleteProjectUseCase {
 
             return result;
         } catch (error) {
-            console.log(error);
-            throw new BadRequestException('프로젝트 삭제에 실패했습니다.');
+            throw new BadRequestException('프로젝트 삭제에 실패했습니다.', { cause: error });
         }
     }
 }

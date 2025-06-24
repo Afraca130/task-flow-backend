@@ -67,10 +67,10 @@ export class ProjectController {
         description: '페이지네이션과 검색 기능을 지원하는 프로젝트 목록을 조회합니다.',
     })
     @ApiQuery({
-        name: 'q',
-        description: '검색어 (프로젝트명)',
+        name: 'isPublic',
+        description: '공개 프로젝트 여부',
         required: false,
-        example: '프로젝트',
+        example: true,
     })
     @ApiQuery({
         name: 'page',
