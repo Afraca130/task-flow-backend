@@ -13,6 +13,7 @@ import { InvitationModule } from './application/invitation/invitation.module';
 import { ProjectMemberModule } from './application/project-member/project-member.module';
 import { NotificationModule } from './application/notification/notification.module';
 import { IssueModule } from './application/issue/issue.module';
+import { ActivityLogModule } from './application/activity-log/activity-log.module';
 
 @Module({
     imports: [
@@ -37,6 +38,7 @@ import { IssueModule } from './application/issue/issue.module';
         ProjectMemberModule,
         NotificationModule,
         IssueModule,
+        ActivityLogModule,
     ],
     controllers: [AppController],
     providers: [AppService],
