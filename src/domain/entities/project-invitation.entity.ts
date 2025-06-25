@@ -5,17 +5,12 @@ import { Project } from './project.entity';
 import { User } from './user.entity';
 
 @Entity('project_invitations')
-@Index(['inviteToken'], { unique: true })
-@Index(['projectId', 'inviteeEmail'], { unique: true })
 export class ProjectInvitation extends Base {
     @Column({ name: 'project_id', type: 'uuid' })
     projectId: string;
 
     @Column({ name: 'inviter_id', type: 'uuid' })
     inviterId: string;
-
-    @Column({ name: 'invitee_email', type: 'varchar', length: 255 })
-    inviteeEmail: string;
 
     @Column({ name: 'invitee_id', type: 'uuid', nullable: true })
     inviteeId?: string;
@@ -27,8 +22,8 @@ export class ProjectInvitation extends Base {
     })
     status: InvitationStatus;
 
-    @Column({ name: 'invite_token', type: 'varchar', length: 255, unique: true })
-    inviteToken: string;
+    @Column({ name: 'token', type: 'varchar', length: 255, unique: true })
+    token: string;
 
     @Column({ name: 'message', type: 'text', nullable: true })
     message?: string;

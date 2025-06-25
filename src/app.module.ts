@@ -10,6 +10,7 @@ import { jwtConfig } from './common/configs/jwt.config';
 import { AuthModule } from './application/auth/auth.module';
 import { ProjectModule } from './application/project/project.module';
 import { InvitationModule } from './application/invitation/invitation.module';
+import { ProjectMemberModule } from './application/project-member/project-member.module';
 
 @Module({
     imports: [
@@ -31,6 +32,7 @@ import { InvitationModule } from './application/invitation/invitation.module';
         AuthModule,
         ProjectModule,
         InvitationModule,
+        ProjectMemberModule,
     ],
     controllers: [AppController],
     providers: [AppService],

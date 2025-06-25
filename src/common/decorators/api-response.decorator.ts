@@ -15,8 +15,21 @@ import {
     ApiNoContentResponse,
 } from '@nestjs/swagger';
 
+// 응답 타입 정의
+export type ApiResponseType = 'single' | 'array' | 'paginated';
+
+// API 응답 옵션 인터페이스
+interface ApiResponseOptions<TModel extends Type<any> = any> {
+    status?: number;
+    description: string;
+    type?: TModel;
+    responseType?: ApiResponseType;
+    includeAuth?: boolean;
+    additionalErrors?: any[];
+}
+
 // 표준 에러 응답 데코레이터
-const ApiStandardErrors = (includeAuth = true) => {
+export const ApiStandardErrors = (includeAuth = true, additionalErrors: any[] = []) => {
     const decorators = [
         ApiBadRequestResponse({
             description: '잘못된 요청입니다.',
@@ -26,6 +39,7 @@ const ApiStandardErrors = (includeAuth = true) => {
             description: '서버 내부 오류가 발생했습니다.',
             type: ErrorResponseDto,
         }),
+        ...additionalErrors,
     ];
 
     if (includeAuth) {
@@ -44,39 +58,88 @@ const ApiStandardErrors = (includeAuth = true) => {
     return applyDecorators(...decorators);
 };
 
-// 단일 데이터 응답 데코레이터
-export const ApiDataResponse = <TModel extends Type<any>>(options: {
-    status?: number;
-    description: string;
-    type?: TModel;
-    includeAuth?: boolean;
-    additionalErrors?: any[];
-}) => {
-    const { status = 200, description, type, includeAuth = true, additionalErrors = [] } = options;
+// 통합 API 응답 데코레이터
+export const ApiCustomResponse = <TModel extends Type<any>>(options: ApiResponseOptions<TModel>) => {
+    const {
+        status = 200,
+        description,
+        type,
+        responseType = 'single',
+        includeAuth = true,
+        additionalErrors = [],
+    } = options;
 
-    const schema = type
-        ? {
-              allOf: [
-                  { $ref: getSchemaPath(BaseResponseDto) },
-                  {
-                      properties: {
-                          data: { $ref: getSchemaPath(type) },
-                      },
-                  },
-              ],
-          }
-        : {
-              allOf: [
-                  { $ref: getSchemaPath(BaseResponseDto) },
-                  {
-                      properties: {
-                          data: { type: 'object', nullable: true },
-                      },
-                  },
-              ],
-          };
+    // 스키마 생성 함수
+    const createSchema = () => {
+        if (!type) {
+            return {
+                allOf: [
+                    { $ref: getSchemaPath(BaseResponseDto) },
+                    {
+                        properties: {
+                            data: { type: 'object', nullable: true },
+                        },
+                    },
+                ],
+            };
+        }
 
-    const responseDecorator = (() => {
+        switch (responseType) {
+            case 'array':
+                return {
+                    allOf: [
+                        { $ref: getSchemaPath(BaseResponseDto) },
+                        {
+                            properties: {
+                                data: {
+                                    type: 'array',
+                                    items: { $ref: getSchemaPath(type) },
+                                },
+                            },
+                        },
+                    ],
+                };
+
+            case 'paginated':
+                return {
+                    allOf: [
+                        { $ref: getSchemaPath(BaseResponseDto) },
+                        {
+                            properties: {
+                                data: {
+                                    type: 'object',
+                                    properties: {
+                                        items: {
+                                            type: 'array',
+                                            items: { $ref: getSchemaPath(type) },
+                                        },
+                                        meta: { $ref: getSchemaPath(PaginationMetaDto) },
+                                    },
+                                },
+                            },
+                        },
+                    ],
+                };
+
+            case 'single':
+            default:
+                return {
+                    allOf: [
+                        { $ref: getSchemaPath(BaseResponseDto) },
+                        {
+                            properties: {
+                                data: { $ref: getSchemaPath(type) },
+                            },
+                        },
+                    ],
+                };
+        }
+    };
+
+    // 응답 데코레이터 선택
+    const getResponseDecorator = () => {
+        const schema = createSchema();
+
         switch (status) {
             case 200:
                 return ApiOkResponse({ description, schema });
@@ -87,89 +150,41 @@ export const ApiDataResponse = <TModel extends Type<any>>(options: {
             default:
                 return ApiResponse({ status, description, schema });
         }
-    })();
-
-    return applyDecorators(responseDecorator, ...additionalErrors, ApiStandardErrors(includeAuth));
-};
-
-// 페이지네이션 응답 데코레이터
-export const ApiPaginatedResponse = <TModel extends Type<any>>(options: {
-    status?: number;
-    description: string;
-    type: TModel;
-    includeAuth?: boolean;
-    additionalErrors?: any[];
-}) => {
-    const { status = 200, description, type, includeAuth = true, additionalErrors = [] } = options;
-
-    const schema = {
-        allOf: [
-            { $ref: getSchemaPath(BaseResponseDto) },
-            {
-                properties: {
-                    data: {
-                        type: 'object',
-                        properties: {
-                            items: {
-                                type: 'array',
-                                items: { $ref: getSchemaPath(type) },
-                            },
-                            meta: { $ref: getSchemaPath(PaginationMetaDto) },
-                        },
-                    },
-                },
-            },
-        ],
     };
 
-    const responseDecorator = (() => {
-        switch (status) {
-            case 200:
-                return ApiOkResponse({ description, schema });
-            case 201:
-                return ApiCreatedResponse({ description, schema });
-            default:
-                return ApiResponse({ status, description, schema });
-        }
-    })();
-
-    return applyDecorators(responseDecorator, ...additionalErrors, ApiStandardErrors(includeAuth));
+    return applyDecorators(getResponseDecorator(), ApiStandardErrors(includeAuth, additionalErrors));
 };
 
-// 배열 응답 데코레이터 (페이지네이션 없음)
-export const ApiArrayResponse = <TModel extends Type<any>>(options: {
-    status?: number;
-    description: string;
-    type: TModel;
-    includeAuth?: boolean;
-    additionalErrors?: any[];
-}) => {
-    const { status = 200, description, type, includeAuth = true, additionalErrors = [] } = options;
+// 편의성을 위한 특수 데코레이터들
+export const ApiDataResponse = <TModel extends Type<any>>(
+    type: TModel | null,
+    options: Omit<ApiResponseOptions<TModel>, 'type' | 'responseType'>,
+) => {
+    return ApiCustomResponse({
+        ...options,
+        type: type || undefined,
+        responseType: 'single',
+    });
+};
 
-    const schema = {
-        allOf: [
-            { $ref: getSchemaPath(BaseResponseDto) },
-            {
-                properties: {
-                    data: {
-                        type: 'array',
-                        items: { $ref: getSchemaPath(type) },
-                    },
-                },
-            },
-        ],
-    };
+export const ApiArrayResponse = <TModel extends Type<any>>(
+    type: TModel,
+    options: Omit<ApiResponseOptions<TModel>, 'type' | 'responseType'>,
+) => {
+    return ApiCustomResponse({
+        ...options,
+        type,
+        responseType: 'array',
+    });
+};
 
-    const responseDecorator = (() => {
-        switch (status) {
-            case 200:
-                return ApiOkResponse({ description, schema });
-            case 201:
-                return ApiCreatedResponse({ description, schema });
-            default:
-                return ApiResponse({ status, description, schema });
-        }
-    })();
-
-    return applyDecorators(responseDecorator, ...additionalErrors, ApiStandardErrors(includeAuth));
+export const ApiPaginatedResponse = <TModel extends Type<any>>(
+    type: TModel,
+    options: Omit<ApiResponseOptions<TModel>, 'type' | 'responseType'>,
+) => {
+    return ApiCustomResponse({
+        ...options,
+        type,
+        responseType: 'paginated',
+    });
 };
