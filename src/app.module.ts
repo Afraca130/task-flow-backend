@@ -12,6 +12,7 @@ import { ProjectModule } from './application/project/project.module';
 import { InvitationModule } from './application/invitation/invitation.module';
 import { ProjectMemberModule } from './application/project-member/project-member.module';
 import { NotificationModule } from './application/notification/notification.module';
+import { IssueModule } from './application/issue/issue.module';
 
 @Module({
     imports: [
@@ -35,6 +36,7 @@ import { NotificationModule } from './application/notification/notification.modu
         InvitationModule,
         ProjectMemberModule,
         NotificationModule,
+        IssueModule,
     ],
     controllers: [AppController],
     providers: [AppService],

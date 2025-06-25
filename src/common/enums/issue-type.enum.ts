@@ -1,0 +1,7 @@
+export enum IssueType {
+    BUG = 'BUG',
+    FEATURE = 'FEATURE',
+    IMPROVEMENT = 'IMPROVEMENT',
+    QUESTION = 'QUESTION',
+    DISCUSSION = 'DISCUSSION',
+}
