@@ -1,5 +1,6 @@
 import { Injectable, Logger, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
+import { DataSource } from 'typeorm';
 import { ProjectInvitationResponseDto } from '../dtos/invitation-response.dto';
 import { DomainInvitationService } from '@src/domain/invitation/invitation.service';
 import { DomainProjectService } from '@src/domain/project/project.service';
@@ -11,15 +12,21 @@ export class GetProjectInvitationsUseCase {
     constructor(
         private readonly invitationService: DomainInvitationService,
         private readonly projectService: DomainProjectService,
+        private readonly dataSource: DataSource,
     ) {}
 
     async execute(projectId: string, userId: string): Promise<ProjectInvitationResponseDto[]> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
         try {
             this.logger.log(`Getting invitations for project: ${projectId}`);
 
             // 프로젝트 존재 여부 및 권한 확인
             const project = await this.projectService.findOne({
                 where: { id: projectId },
+                queryRunner,
             });
 
             if (!project) {
@@ -32,11 +39,17 @@ export class GetProjectInvitationsUseCase {
             }
 
             // 먼저 만료된 초대들을 정리
-            await this.invitationService.markExpiredInvitations();
+            await this.invitationService.markExpiredInvitations({ queryRunner });
 
             // 프로젝트의 초대 목록 조회
-            const invitations = await this.invitationService.findByProjectId(projectId);
+            const invitations = await this.invitationService.findAll({
+                where: { projectId },
+                relations: ['inviter', 'invitee'],
+                order: { createdAt: 'DESC' },
+                queryRunner,
+            });
 
+            await queryRunner.commitTransaction();
             this.logger.log(`Found ${invitations.length} invitations for project: ${projectId}`);
 
             return invitations.map((invitation) =>
@@ -45,8 +58,11 @@ export class GetProjectInvitationsUseCase {
                 }),
             );
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             this.logger.error(`Failed to get invitations for project: ${projectId}`, error);
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 }

@@ -2,6 +2,8 @@ import { Injectable, Logger, NotFoundException, BadRequestException, ForbiddenEx
 import { DomainInvitationService } from '@src/domain/invitation/invitation.service';
 import { DomainUserService } from '@src/domain/user/user.service';
 import { InvitationStatus } from '@src/common/enums/invitation-status.enum';
+import { DataSource } from 'typeorm';
+import { DomainProjectService } from '@src/domain/project/project.service';
 
 @Injectable()
 export class AcceptInvitationUseCase {
@@ -10,17 +12,21 @@ export class AcceptInvitationUseCase {
     constructor(
         private readonly invitationService: DomainInvitationService,
         private readonly userService: DomainUserService,
+        private readonly projectService: DomainProjectService,
+        private readonly dataSource: DataSource,
     ) {}
 
     async execute(token: string, userId?: string): Promise<void> {
-        try {
-            this.logger.log(`Accepting invitation with token: ${token}`);
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
 
+        try {
             // 먼저 만료된 초대들을 정리
-            await this.invitationService.markExpiredInvitations();
+            await this.invitationService.markExpiredInvitations({ queryRunner });
 
             // 초대 조회
-            const invitation = await this.invitationService.findByToken(token);
+            const invitation = await this.invitationService.findOne({ where: { inviteToken: token }, queryRunner });
             if (!invitation) {
                 throw new NotFoundException('초대를 찾을 수 없습니다.');
             }
@@ -32,13 +38,20 @@ export class AcceptInvitationUseCase {
 
             // 만료 확인
             if (new Date() > invitation.expiresAt) {
-                await this.invitationService.updateStatus(invitation.id, InvitationStatus.EXPIRED);
+                await this.invitationService.update(
+                    invitation.id,
+                    {
+                        status: InvitationStatus.EXPIRED,
+                        respondedAt: new Date(),
+                    },
+                    { queryRunner },
+                );
                 throw new BadRequestException('만료된 초대입니다.');
             }
 
             // 사용자 권한 확인
             if (userId) {
-                const user = await this.userService.findById(userId);
+                const user = await this.userService.findOne({ where: { id: userId }, queryRunner });
                 if (!user) {
                     throw new ForbiddenException('사용자를 찾을 수 없습니다.');
                 }
@@ -49,16 +62,35 @@ export class AcceptInvitationUseCase {
                 }
 
                 // 초대 수락
-                await this.invitationService.updateStatus(invitation.id, InvitationStatus.ACCEPTED, new Date(), userId);
+                await this.invitationService.update(
+                    invitation.id,
+                    {
+                        status: InvitationStatus.ACCEPTED,
+                        respondedAt: new Date(),
+                        inviteeId: userId,
+                    },
+                    { queryRunner },
+                );
             } else {
                 // 익명 사용자의 경우 이메일만으로 수락 (회원가입 필요)
-                await this.invitationService.updateStatus(invitation.id, InvitationStatus.ACCEPTED, new Date());
+                await this.invitationService.update(
+                    invitation.id,
+                    {
+                        status: InvitationStatus.ACCEPTED,
+                        respondedAt: new Date(),
+                    },
+                    { queryRunner },
+                );
             }
 
+            await queryRunner.commitTransaction();
             this.logger.log(`Invitation accepted successfully: ${invitation.id}`);
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             this.logger.error(`Failed to accept invitation with token: ${token}`, error);
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 }

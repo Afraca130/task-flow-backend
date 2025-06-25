@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
 import { BaseRepository } from '@src/common/repositories/base.repository';
 import { ProjectInvitation } from '../entities/project-invitation.entity';
 import { InvitationStatus } from '@src/common/enums/invitation-status.enum';
+import { IRepositoryOptions } from '@src/common/interfaces/repository.interface';
 
 @Injectable()
 export class DomainInvitationRepository extends BaseRepository<ProjectInvitation> {
@@ -14,64 +15,14 @@ export class DomainInvitationRepository extends BaseRepository<ProjectInvitation
         super(invitationRepository);
     }
 
-    async findByToken(token: string): Promise<ProjectInvitation | null> {
-        return this.invitationRepository.findOne({
-            where: { inviteToken: token },
-            relations: ['project', 'inviter', 'invitee'],
-        });
-    }
+    async markExpiredInvitations(repositoryOptions: IRepositoryOptions<ProjectInvitation>): Promise<void> {
+        const repository = repositoryOptions?.queryRunner
+            ? repositoryOptions.queryRunner.manager.getRepository(this.repository.target)
+            : this.repository;
 
-    async findByProjectId(projectId: string): Promise<ProjectInvitation[]> {
-        return this.invitationRepository.find({
-            where: { projectId },
-            relations: ['inviter', 'invitee'],
-            order: { createdAt: 'DESC' },
-        });
-    }
-
-    async findByInviteeId(inviteeId: string, status?: InvitationStatus): Promise<ProjectInvitation[]> {
-        const where: any = { inviteeId };
-        if (status) {
-            where.status = status;
-        }
-
-        return this.invitationRepository.find({
-            where,
-            relations: ['project', 'inviter'],
-            order: { createdAt: 'DESC' },
-        });
-    }
-
-    async findByInviteeEmail(email: string, status?: InvitationStatus): Promise<ProjectInvitation[]> {
-        const where: any = { inviteeEmail: email };
-        if (status) {
-            where.status = status;
-        }
-
-        return this.invitationRepository.find({
-            where,
-            relations: ['project', 'inviter'],
-            order: { createdAt: 'DESC' },
-        });
-    }
-
-    async findPendingByProjectAndEmail(projectId: string, email: string): Promise<ProjectInvitation | null> {
-        return this.invitationRepository.findOne({
-            where: {
-                projectId,
-                inviteeEmail: email,
-                status: InvitationStatus.PENDING,
-            },
-        });
-    }
-
-    async markExpiredInvitations(): Promise<void> {
-        await this.invitationRepository
-            .createQueryBuilder()
-            .update(ProjectInvitation)
-            .set({ status: InvitationStatus.EXPIRED })
-            .where('status = :status', { status: InvitationStatus.PENDING })
-            .andWhere('expiresAt < :now', { now: new Date() })
-            .execute();
+        await repository.update(
+            { status: InvitationStatus.PENDING, expiresAt: LessThan(new Date()) },
+            { status: InvitationStatus.EXPIRED },
+        );
     }
 }
