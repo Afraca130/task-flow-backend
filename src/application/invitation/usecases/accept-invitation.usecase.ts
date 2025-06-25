@@ -2,8 +2,9 @@ import { Injectable, Logger, NotFoundException, BadRequestException, ForbiddenEx
 import { DomainInvitationService } from '@src/domain/invitation/invitation.service';
 import { DomainUserService } from '@src/domain/user/user.service';
 import { InvitationStatus } from '@src/common/enums/invitation-status.enum';
+import { ProjectMemberRole } from '@src/common/enums/project-member-role.enum';
 import { DataSource } from 'typeorm';
-import { DomainProjectService } from '@src/domain/project/project.service';
+import { DomainProjectMemberService } from '@src/domain/project-member/project-member.service';
 
 @Injectable()
 export class AcceptInvitationUseCase {
@@ -12,11 +13,14 @@ export class AcceptInvitationUseCase {
     constructor(
         private readonly invitationService: DomainInvitationService,
         private readonly userService: DomainUserService,
-        private readonly projectService: DomainProjectService,
+
+        private readonly projectMemberService: DomainProjectMemberService,
         private readonly dataSource: DataSource,
     ) {}
 
     async execute(token: string, userId?: string): Promise<void> {
+        this.logger.log(`invitation userId: ${userId}`);
+
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -26,7 +30,7 @@ export class AcceptInvitationUseCase {
             await this.invitationService.markExpiredInvitations({ queryRunner });
 
             // 초대 조회
-            const invitation = await this.invitationService.findOne({ where: { inviteToken: token }, queryRunner });
+            const invitation = await this.invitationService.findOne({ where: { token }, queryRunner });
             if (!invitation) {
                 throw new NotFoundException('초대를 찾을 수 없습니다.');
             }
@@ -56,11 +60,6 @@ export class AcceptInvitationUseCase {
                     throw new ForbiddenException('사용자를 찾을 수 없습니다.');
                 }
 
-                // 초대받은 이메일과 현재 사용자의 이메일이 일치하는지 확인
-                if (user.email !== invitation.inviteeEmail) {
-                    throw new ForbiddenException('이 초대를 수락할 권한이 없습니다.');
-                }
-
                 // 초대 수락
                 await this.invitationService.update(
                     invitation.id,
@@ -71,6 +70,25 @@ export class AcceptInvitationUseCase {
                     },
                     { queryRunner },
                 );
+
+                // 프로젝트 멤버로 추가 (중복 체크)
+                const existingMember = await this.projectMemberService.findOne({
+                    where: { projectId: invitation.projectId, userId },
+                    queryRunner,
+                });
+
+                if (!existingMember) {
+                    await this.projectMemberService.addMember(
+                        invitation.projectId,
+                        userId,
+                        ProjectMemberRole.MEMBER,
+                        invitation.inviterId,
+                        { queryRunner },
+                    );
+                    this.logger.log(`Added user ${userId} as member to project ${invitation.projectId}`);
+                } else {
+                    this.logger.log(`User ${userId} is already a member of project ${invitation.projectId}`);
+                }
             } else {
                 // 익명 사용자의 경우 이메일만으로 수락 (회원가입 필요)
                 await this.invitationService.update(

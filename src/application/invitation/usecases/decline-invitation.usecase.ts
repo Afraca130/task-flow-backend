@@ -27,7 +27,7 @@ export class DeclineInvitationUseCase {
 
             // 초대 조회
             const invitation = await this.invitationService.findOne({
-                where: { inviteToken: token },
+                where: { token },
                 queryRunner,
             });
 
@@ -62,11 +62,6 @@ export class DeclineInvitationUseCase {
 
                 if (!user) {
                     throw new ForbiddenException('사용자를 찾을 수 없습니다.');
-                }
-
-                // 초대받은 이메일과 현재 사용자의 이메일이 일치하는지 확인
-                if (user.email !== invitation.inviteeEmail) {
-                    throw new ForbiddenException('이 초대를 거절할 권한이 없습니다.');
                 }
 
                 // 초대 거절

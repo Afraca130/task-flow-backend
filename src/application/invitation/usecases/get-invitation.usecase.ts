@@ -26,7 +26,7 @@ export class GetInvitationUseCase {
 
             // 초대 조회 (관계 데이터 포함)
             const invitation = await this.invitationService.findOne({
-                where: { inviteToken: token },
+                where: { token },
                 relations: ['project', 'inviter', 'invitee'],
                 queryRunner,
             });

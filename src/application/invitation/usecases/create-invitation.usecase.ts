@@ -47,7 +47,7 @@ export class CreateInvitationUseCase {
             const existingInvitation = await this.invitationService.findOne({
                 where: {
                     projectId: createInvitationDto.projectId,
-                    inviteeEmail: createInvitationDto.inviteeEmail,
+                    inviteeId: createInvitationDto.inviteeId,
                     status: InvitationStatus.PENDING,
                 },
                 queryRunner,
@@ -59,31 +59,25 @@ export class CreateInvitationUseCase {
 
             // 초대받을 사용자 정보 조회 (선택적)
             const inviteeUser = await this.userService.findOne({
-                where: { email: createInvitationDto.inviteeEmail },
+                where: { id: createInvitationDto.inviteeId },
                 queryRunner,
             });
 
             // 초대 생성
             const invitationData = {
-                id: uuidv4(),
                 projectId: createInvitationDto.projectId,
                 inviterId: inviterId,
-                inviteeEmail: createInvitationDto.inviteeEmail,
                 inviteeId: inviteeUser?.id,
-                status: InvitationStatus.PENDING,
-                inviteToken: this.generateInviteToken(),
+                token: this.generateToken(),
                 message: createInvitationDto.message,
-                expiresAt: this.getExpirationDate(7), // 7일 후 만료
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7일 후 만료
+                status: InvitationStatus.PENDING,
             };
 
-            const invitation = await this.invitationService.create(invitationData, { queryRunner });
-            const savedInvitation = await this.invitationService.save(invitation, { queryRunner });
+            const savedInvitation = await this.invitationService.save(invitationData, { queryRunner });
 
-            // 관계 데이터와 함께 조회
-            const invitationWithRelations = await this.invitationService.findOne({
-                where: { inviteToken: savedInvitation.inviteToken },
+            const invitation = await this.invitationService.findOne({
+                where: { token: savedInvitation.token },
                 relations: ['project', 'inviter', 'invitee'],
                 queryRunner,
             });
@@ -91,7 +85,7 @@ export class CreateInvitationUseCase {
             await queryRunner.commitTransaction();
             this.logger.log(`Invitation created successfully: ${savedInvitation.id}`);
 
-            return plainToInstance(ProjectInvitationResponseDto, invitationWithRelations, {
+            return plainToInstance(ProjectInvitationResponseDto, invitation, {
                 excludeExtraneousValues: true,
             });
         } catch (error) {
@@ -103,18 +97,7 @@ export class CreateInvitationUseCase {
         }
     }
 
-    private generateInviteToken(): string {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < 32; i++) {
-            result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return result;
-    }
-
-    private getExpirationDate(days: number = 7): Date {
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + days);
-        return expiresAt;
+    private generateToken(): string {
+        return uuidv4() + Date.now().toString(36);
     }
 }

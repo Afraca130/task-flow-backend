@@ -51,10 +51,9 @@ export class ProjectController {
         type: CreateProjectDto,
         description: '프로젝트 생성 정보',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(ProjectResponseDto, {
         status: HttpStatus.CREATED,
         description: '프로젝트가 성공적으로 생성되었습니다.',
-        type: ProjectResponseDto,
         additionalErrors: [
             ApiConflictResponse({
                 description: '이미 존재하는 프로젝트명입니다.',
@@ -89,9 +88,8 @@ export class ProjectController {
         required: false,
         example: 10,
     })
-    @ApiPaginatedResponse({
+    @ApiPaginatedResponse(ProjectResponseDto, {
         description: '프로젝트 목록 조회가 성공적으로 완료되었습니다.',
-        type: ProjectResponseDto,
     })
     async getProjects(@Query() query: GetPaginatedProjectQueryDto) {
         return this.projectService.getProjects(query);
@@ -108,9 +106,8 @@ export class ProjectController {
         type: 'string',
         format: 'uuid',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(ProjectResponseDto, {
         description: '프로젝트 상세 정보 조회가 성공적으로 완료되었습니다.',
-        type: ProjectResponseDto,
         additionalErrors: [
             ApiNotFoundResponse({
                 description: '프로젝트를 찾을 수 없습니다.',
@@ -141,9 +138,8 @@ export class ProjectController {
         type: UpdateProjectDto,
         description: '수정할 프로젝트 정보',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(ProjectResponseDto, {
         description: '프로젝트 정보가 성공적으로 수정되었습니다.',
-        type: ProjectResponseDto,
         additionalErrors: [
             ApiNotFoundResponse({
                 description: '프로젝트를 찾을 수 없습니다.',
@@ -174,7 +170,7 @@ export class ProjectController {
         type: 'string',
         format: 'uuid',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(null, {
         status: HttpStatus.NO_CONTENT,
         description: '프로젝트가 성공적으로 삭제되었습니다.',
         additionalErrors: [

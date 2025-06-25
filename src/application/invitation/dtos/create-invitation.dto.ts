@@ -11,12 +11,12 @@ export class CreateInvitationDto {
     projectId: string;
 
     @ApiProperty({
-        description: '초대받을 사용자 이메일',
-        example: 'invitee@example.com',
-        format: 'email',
+        description: '초대받을 사용자 ID',
+        example: 'uuid-v4-string',
+        format: 'uuid',
     })
-    @IsEmail({}, { message: '올바른 이메일 형식을 입력하세요.' })
-    inviteeEmail: string;
+    @IsUUID(4, { message: '올바른 사용자 ID를 입력하세요.' })
+    inviteeId: string;
 
     @ApiPropertyOptional({
         description: '초대 메시지',

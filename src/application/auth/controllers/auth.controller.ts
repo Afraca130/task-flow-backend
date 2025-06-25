@@ -24,10 +24,9 @@ export class AuthController {
         type: RegisterDto,
         description: '회원가입 정보',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(UserDto, {
         status: HttpStatus.CREATED,
         description: '회원가입이 성공적으로 완료되었습니다.',
-        type: UserDto,
         includeAuth: false,
         additionalErrors: [
             ApiConflictResponse({
@@ -49,10 +48,9 @@ export class AuthController {
         type: LoginDto,
         description: '로그인 정보',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(LoginResponseDto, {
         status: HttpStatus.OK,
         description: '로그인이 성공적으로 완료되었습니다.',
-        type: LoginResponseDto,
         includeAuth: false,
         additionalErrors: [
             ApiBadRequestResponse({

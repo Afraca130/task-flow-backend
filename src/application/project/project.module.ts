@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { DomainProjectModule } from '@src/domain/project/project.module';
+import { DomainProjectMemberModule } from '@src/domain/project-member/project-member.module';
 import { ProjectController } from './controllers/project.controller';
 import {
     CreateProjectUseCase,
@@ -11,7 +12,7 @@ import {
 import { ProjectService } from './project.service';
 
 @Module({
-    imports: [DomainProjectModule],
+    imports: [DomainProjectModule, DomainProjectMemberModule],
     controllers: [ProjectController],
     providers: [
         ProjectService,

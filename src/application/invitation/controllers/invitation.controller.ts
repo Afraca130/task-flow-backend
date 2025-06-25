@@ -47,10 +47,9 @@ export class InvitationController {
         type: CreateInvitationDto,
         description: '초대 생성 정보',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(ProjectInvitationResponseDto, {
         status: HttpStatus.CREATED,
         description: '초대가 성공적으로 생성되었습니다.',
-        type: ProjectInvitationResponseDto,
         additionalErrors: [
             ApiNotFoundResponse({
                 description: '프로젝트를 찾을 수 없습니다.',
@@ -82,7 +81,7 @@ export class InvitationController {
         description: '초대 토큰',
         type: 'string',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(null, {
         status: HttpStatus.NO_CONTENT,
         description: '초대가 성공적으로 수락되었습니다.',
         additionalErrors: [
@@ -112,7 +111,7 @@ export class InvitationController {
         description: '초대 토큰',
         type: 'string',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(null, {
         status: HttpStatus.NO_CONTENT,
         description: '초대가 성공적으로 거절되었습니다.',
         additionalErrors: [
@@ -141,9 +140,8 @@ export class InvitationController {
         description: '초대 토큰',
         type: 'string',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(ProjectInvitationResponseDto, {
         description: '초대 정보 조회가 성공적으로 완료되었습니다.',
-        type: ProjectInvitationResponseDto,
         includeAuth: false,
         additionalErrors: [
             ApiNotFoundResponse({
@@ -169,9 +167,8 @@ export class InvitationController {
         type: 'string',
         format: 'uuid',
     })
-    @ApiArrayResponse({
+    @ApiArrayResponse(ProjectInvitationResponseDto, {
         description: '프로젝트 초대 목록 조회가 성공적으로 완료되었습니다.',
-        type: ProjectInvitationResponseDto,
         additionalErrors: [
             ApiNotFoundResponse({
                 description: '프로젝트를 찾을 수 없습니다.',
@@ -200,9 +197,8 @@ export class InvitationController {
         enum: InvitationStatus,
         required: false,
     })
-    @ApiArrayResponse({
+    @ApiArrayResponse(ProjectInvitationResponseDto, {
         description: '받은 초대 목록 조회가 성공적으로 완료되었습니다.',
-        type: ProjectInvitationResponseDto,
     })
     async getReceivedInvitations(@User('id') userId: string, @Query('status') status?: InvitationStatus) {
         return this.invitationService.getUserReceivedInvitations(userId, status);
@@ -215,9 +211,8 @@ export class InvitationController {
         summary: '대기 중인 초대 목록 조회',
         description: '현재 사용자의 대기 중인 초대 목록을 조회합니다.',
     })
-    @ApiArrayResponse({
+    @ApiArrayResponse(ProjectInvitationResponseDto, {
         description: '대기 중인 초대 목록 조회가 성공적으로 완료되었습니다.',
-        type: ProjectInvitationResponseDto,
     })
     async getPendingInvitations(@User('id') userId: string) {
         return this.invitationService.getUserPendingInvitations(userId);
@@ -236,7 +231,7 @@ export class InvitationController {
         type: 'string',
         format: 'uuid',
     })
-    @ApiDataResponse({
+    @ApiDataResponse(null, {
         status: HttpStatus.NO_CONTENT,
         description: '초대가 성공적으로 삭제되었습니다.',
         additionalErrors: [

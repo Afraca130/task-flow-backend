@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { InvitationModule as DomainInvitationModule } from '@src/domain/invitation/invitation.module';
 import { DomainProjectModule } from '@src/domain/project/project.module';
 import { DomainUserModule } from '@src/domain/user/user.module';
+import { DomainProjectMemberModule } from '@src/domain/project-member/project-member.module';
 
 // Controllers
 import { InvitationController } from './controllers/invitation.controller';
@@ -21,7 +22,7 @@ import {
 } from './usecases/index';
 
 @Module({
-    imports: [DomainInvitationModule, DomainProjectModule, DomainUserModule],
+    imports: [DomainInvitationModule, DomainProjectModule, DomainUserModule, DomainProjectMemberModule],
     controllers: [InvitationController],
     providers: [
         InvitationService,

@@ -85,12 +85,12 @@ export class ProjectInvitationResponseDto {
     inviterId: string;
 
     @ApiProperty({
-        description: '초대받을 사용자 이메일',
-        example: 'invitee@example.com',
-        format: 'email',
+        description: '초대 token',
+        example: '5d7827d1-17e7-4242-8ba2-4ab9b98243c0',
+        format: 'token',
     })
     @Expose()
-    inviteeEmail: string;
+    token: string;
 
     @ApiPropertyOptional({
         description: '초대받은 사용자 ID',
