@@ -22,20 +22,6 @@ export class DomainNotificationRepository extends BaseRepository<Notification> {
         return repository.count(options);
     }
 
-    async getLastNotificationDate(userId: string, options?: IRepositoryOptions<Notification>): Promise<Date | null> {
-        const repository = options?.queryRunner
-            ? options.queryRunner.manager.getRepository(this.repository.target)
-            : this.repository;
-
-        const notification = await repository.findOne({
-            where: { userId },
-            order: { createdAt: 'DESC' },
-            select: ['createdAt'],
-        });
-
-        return notification?.createdAt || null;
-    }
-
     async markAllAsRead(userId: string, options?: IRepositoryOptions<Notification>): Promise<number> {
         const repository = options?.queryRunner
             ? options.queryRunner.manager.getRepository(this.repository.target)

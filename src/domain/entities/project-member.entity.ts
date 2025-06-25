@@ -5,7 +5,6 @@ import { Project } from './project.entity';
 import { User } from './user.entity';
 
 @Entity('project_members')
-@Index(['projectId', 'userId'], { unique: true })
 export class ProjectMember extends Base {
     @Column({ name: 'project_id', type: 'uuid' })
     projectId: string;
