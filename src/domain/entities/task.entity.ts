@@ -4,6 +4,7 @@ import { TaskStatus } from '@src/common/enums/task-status.enum';
 import { TaskPriority } from '@src/common/enums/task-priority.enum';
 import { User } from './user.entity';
 import { Project } from './project.entity';
+import { Comment } from './comment.entity';
 
 @Entity('tasks')
 export class Task extends Base {
@@ -58,7 +59,6 @@ export class Task extends Base {
     @JoinColumn({ name: 'project_id' })
     project: Project;
 
-    // TODO: Comment 엔티티가 생성되면 추가
-    // @OneToMany(() => Comment, (comment) => comment.task)
-    // comments?: Comment[];
+    @OneToMany(() => Comment, (comment) => comment.task)
+    comments?: Comment[];
 }

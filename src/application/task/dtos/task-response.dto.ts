@@ -52,6 +52,41 @@ export class TaskProjectDto {
     description?: string;
 }
 
+// Forward declaration for circular reference
+export class TaskCommentDto {
+    @ApiProperty({
+        description: '댓글 ID',
+        example: 'uuid-v4-string',
+        format: 'uuid',
+    })
+    @Expose()
+    id: string;
+
+    @ApiProperty({
+        description: '댓글 내용',
+        example: '이 태스크는 언제까지 완료 예정인가요?',
+    })
+    @Expose()
+    content: string;
+
+    @ApiProperty({
+        description: '작성자 정보',
+        type: TaskUserDto,
+    })
+    @Expose()
+    @Type(() => TaskUserDto)
+    user: TaskUserDto;
+
+    @ApiProperty({
+        description: '생성 시간',
+        example: '2024-01-01T10:00:00.000Z',
+        format: 'date-time',
+    })
+    @Expose()
+    @Transform(({ value }) => value?.toISOString())
+    createdAt: string;
+}
+
 @Exclude()
 export class TaskResponseDto {
     @ApiProperty({
@@ -182,12 +217,11 @@ export class TaskResponseDto {
     @Type(() => TaskProjectDto)
     project?: TaskProjectDto;
 
-    // TODO: Comment 엔티티가 생성되면 추가
-    // @ApiPropertyOptional({
-    //     description: '댓글 목록',
-    //     type: [CommentResponseDto],
-    // })
-    // @Expose()
-    // @Type(() => CommentResponseDto)
-    // comments?: CommentResponseDto[];
+    @ApiPropertyOptional({
+        description: '댓글 목록',
+        type: [TaskCommentDto],
+    })
+    @Expose()
+    @Type(() => TaskCommentDto)
+    comments?: TaskCommentDto[];
 }
