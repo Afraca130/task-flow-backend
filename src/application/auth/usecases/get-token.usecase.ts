@@ -15,7 +15,7 @@ export class GetTokenUsecase {
 
         const accessToken = this.jwtService.sign(payload, {
             expiresIn: '1d',
-            secret: process.env.JWT_SECRET,
+            secret: process.env.SUPABASE_JWT_SECRET,
         });
 
         return accessToken;

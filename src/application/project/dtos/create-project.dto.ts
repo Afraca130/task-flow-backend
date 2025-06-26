@@ -1,7 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional, IsBoolean, IsEnum, IsDateString, MaxLength } from 'class-validator';
+import {
+    IsString,
+    IsNotEmpty,
+    IsOptional,
+    IsBoolean,
+    IsEnum,
+    IsDateString,
+    MaxLength,
+    IsHexColor,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
-import { ApprovalType } from '@src/common/enums/approval-type.enum';
+import { ProjectPriority } from '@src/common/enums/project-priority.enum';
 
 export class CreateProjectDto {
     @ApiProperty({
@@ -27,39 +36,49 @@ export class CreateProjectDto {
     description?: string;
 
     @ApiPropertyOptional({
+        description: '프로젝트 색상 (HEX 코드)',
+        example: '#3B82F6',
+        default: '#3B82F6',
+    })
+    @IsOptional()
+    @IsString({ message: '색상은 문자열이어야 합니다.' })
+    @IsHexColor({ message: '유효한 HEX 색상 코드를 입력해주세요.' })
+    color?: string = '#3B82F6';
+
+    @ApiPropertyOptional({
+        description: '프로젝트 우선순위',
+        example: ProjectPriority.MEDIUM,
+        enum: ProjectPriority,
+        default: ProjectPriority.MEDIUM,
+    })
+    @IsOptional()
+    @IsEnum(ProjectPriority, { message: '우선순위는 LOW, MEDIUM, HIGH, URGENT 중 하나여야 합니다.' })
+    priority?: ProjectPriority = ProjectPriority.MEDIUM;
+
+    @ApiPropertyOptional({
+        description: '프로젝트 마감일',
+        example: '2024-12-31T23:59:59.000Z',
+        format: 'date-time',
+    })
+    @IsOptional()
+    @IsDateString({}, { message: '마감일은 유효한 날짜 형식이어야 합니다.' })
+    dueDate?: string;
+
+    @ApiPropertyOptional({
+        description: '프로젝트 활성화 상태',
+        example: true,
+        default: true,
+    })
+    @IsOptional()
+    @IsBoolean({ message: '활성화 상태는 boolean 값이어야 합니다.' })
+    isActive?: boolean = true;
+
+    @ApiPropertyOptional({
         description: '프로젝트 공개 여부',
-        example: false,
-        default: false,
+        example: true,
+        default: true,
     })
     @IsOptional()
     @IsBoolean({ message: '공개 여부는 boolean 값이어야 합니다.' })
-    isPublic?: boolean = false;
-
-    @ApiPropertyOptional({
-        description: '프로젝트 시작일',
-        example: '2024-01-01',
-        format: 'date',
-    })
-    @IsOptional()
-    @IsDateString({}, { message: '시작일은 유효한 날짜 형식이어야 합니다.' })
-    startDate?: string;
-
-    @ApiPropertyOptional({
-        description: '프로젝트 종료일',
-        example: '2024-12-31',
-        format: 'date',
-    })
-    @IsOptional()
-    @IsDateString({}, { message: '종료일은 유효한 날짜 형식이어야 합니다.' })
-    endDate?: string;
-
-    @ApiPropertyOptional({
-        description: '승인 방식',
-        example: ApprovalType.AUTO,
-        enum: ApprovalType,
-        default: ApprovalType.AUTO,
-    })
-    @IsOptional()
-    @IsEnum(ApprovalType, { message: '승인 방식은 AUTO 또는 MANUAL이어야 합니다.' })
-    approvalType?: ApprovalType = ApprovalType.AUTO;
+    isPublic?: boolean = true;
 }

@@ -16,26 +16,36 @@ export class GetProjectsUseCase {
         const { page, limit, isPublic } = query;
         const offset = (page - 1) * limit;
 
-        const where: FindOptionsWhere<Project> = {
-            isPublic,
-        };
+        const where: FindOptionsWhere<Project> = {};
+
+        // isActive가 true인 프로젝트만 조회
+        where.isActive = true;
+
+        if (isPublic !== undefined) {
+            where.isPublic = isPublic;
+        }
 
         const options: IRepositoryOptions<Project> = {
             where,
+            relations: ['owner', 'members'],
             order: {
                 createdAt: 'DESC',
             },
             skip: offset,
+            take: limit,
         };
 
-        options.skip = (page - 1) * limit;
-        options.take = limit;
-
-        const [projects, total] = await this.projectService.getProjects(options);
+        const [projects, total] = await this.projectService.getProjectsWithCounts(options);
 
         return {
             data: projects.map((project) => {
-                return plainToInstance(ProjectResponseDto, project);
+                const response = plainToInstance(ProjectResponseDto, project);
+                // memberCount 계산
+                response.memberCount = project.members?.length || 0;
+
+                // taskCount는 별도 서비스를 통해 계산 (circular dependency 해결)
+                response.taskCount = 0; // 임시로 0 설정
+                return response;
             }),
             meta: {
                 total,

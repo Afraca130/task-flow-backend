@@ -8,15 +8,20 @@ export class GetProjectByIdUseCase {
     constructor(private readonly projectService: DomainProjectService) {}
 
     async execute(projectId: string): Promise<ProjectResponseDto | null> {
-        const project = await this.projectService.findOne({
-            where: { id: projectId } as any,
-            relations: ['owner'],
-        });
+        const project = await this.projectService.getProjectWithCounts(projectId);
 
         if (!project) {
             return null;
         }
 
-        return plainToInstance(ProjectResponseDto, project);
+        const response = plainToInstance(ProjectResponseDto, project);
+
+        // memberCount 계산
+        response.memberCount = project.members?.length || 0;
+
+        // taskCount는 별도 서비스를 통해 계산 (circular dependency 해결)
+        response.taskCount = 0; // 임시로 0 설정
+
+        return response;
     }
 }

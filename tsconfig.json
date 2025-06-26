@@ -19,8 +19,10 @@
         "noFallthroughCasesInSwitch": false,
         "paths": {
             "*": ["./node_modules/*"],
+            "@/*": ["src/*"],
             "@src/*": ["src/*"],
-            "@libs/*": ["src/common/*"]
+            "@libs/*": ["src/common/*"],
+            "@common/*": ["src/common/*"]
         }
     },
     "include": ["src/**/*", "src/common/**/*", "src/common"],

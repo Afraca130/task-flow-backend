@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { DomainProjectService } from '@src/domain/project/project.service';
 import { plainToInstance } from 'class-transformer';
-import { DateUtil } from '@src/common/utils/date.util';
 import { UpdateProjectDto, ProjectResponseDto } from '@src/application/project/dtos';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class UpdateProjectUseCase {
     constructor(private readonly projectService: DomainProjectService) {}
 
     async execute(projectId: string, updateProjectDto: UpdateProjectDto, userId: string): Promise<ProjectResponseDto> {
-        const { name, description, isPublic, startDate, endDate, approvalType } = updateProjectDto;
+        const { name, description, color, priority, dueDate, isActive, isPublic } = updateProjectDto;
 
         const project = await this.projectService.findOne({ where: { id: projectId } });
         if (!project) {
@@ -37,23 +36,31 @@ export class UpdateProjectUseCase {
         }
 
         try {
-            // 날짜 유효성 검사
-            const newStartDate = startDate || project.startDate;
-            const newEndDate = endDate || project.endDate;
-
-            if (newStartDate && newEndDate && newStartDate > newEndDate) {
-                throw new ConflictException('시작일은 종료일보다 늦을 수 없습니다.');
+            // 마감일 유효성 검사
+            if (dueDate && new Date(dueDate) <= new Date()) {
+                throw new BadRequestException('마감일은 현재 시간보다 미래여야 합니다.');
             }
 
             if (description !== undefined) project.description = description;
+            if (color !== undefined) project.color = color;
+            if (priority !== undefined) project.priority = priority;
+            if (dueDate !== undefined) project.dueDate = dueDate ? new Date(dueDate) : null;
+            if (isActive !== undefined) project.isActive = isActive;
             if (isPublic !== undefined) project.isPublic = isPublic;
-            if (startDate !== undefined) project.startDate = DateUtil.date(startDate).toDate();
-            if (endDate !== undefined) project.endDate = DateUtil.date(endDate).toDate();
-            if (approvalType !== undefined) project.approvalType = approvalType;
 
             await this.projectService.updateProject(project);
 
-            return plainToInstance(ProjectResponseDto, project);
+            // 업데이트된 프로젝트에 관계 데이터 추가
+            const projectWithCounts = await this.projectService.getProjectWithCounts(project.id);
+            const response = plainToInstance(ProjectResponseDto, projectWithCounts);
+
+            // memberCount 계산
+            response.memberCount = projectWithCounts.members?.length || 0;
+
+            // taskCount는 별도 서비스를 통해 계산 (circular dependency 해결)
+            response.taskCount = 0; // 임시로 0 설정
+
+            return response;
         } catch (error) {
             throw new BadRequestException('프로젝트 수정에 실패했습니다.', { cause: error });
         }
