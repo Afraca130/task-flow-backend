@@ -1,19 +1,22 @@
 import { ApiDataResponse } from '@src/common/decorators/api-response.decorator';
 import { Public } from '@src/common/decorators/pulic.decorator';
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, Inject } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiBody, ApiConflictResponse, ApiBadRequestResponse } from '@nestjs/swagger';
 import { RegisterDto } from '@src/application/auth/dtos';
 import { LoginDto } from '../dtos/login.dto';
 import { LoginResponseDto } from '../dtos/login-response.dto';
 import { UserDto } from '../dtos/user-response.dto';
-import { AuthService } from '@src/application/auth/auth.service';
+import { AuthService } from '../auth.service';
 import { ErrorResponseDto } from '@src/common/dtos/response.dto';
 
 @ApiTags('인증')
 @Controller('auth')
 @Public()
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        @Inject(AuthService)
+        private readonly authService: AuthService,
+    ) {}
 
     @Post('register')
     @ApiOperation({

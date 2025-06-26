@@ -30,6 +30,25 @@ export class DomainCommentRepository extends BaseRepository<Comment> {
         });
     }
 
+    async findByTaskIdFlat(taskId: string, options?: IRepositoryOptions<Comment>): Promise<Comment[]> {
+        const repository = options?.queryRunner
+            ? options.queryRunner.manager.getRepository(this.repository.target)
+            : this.repository;
+
+        // 모든 댓글을 플랫하게 조회 (대댓글 구조 없이)
+        return repository.find({
+            where: {
+                taskId,
+                isDeleted: false,
+            },
+            relations: ['user'],
+            order: {
+                createdAt: 'ASC',
+            },
+            ...options,
+        });
+    }
+
     async findByTaskIdWithReplies(taskId: string, options?: IRepositoryOptions<Comment>): Promise<Comment[]> {
         const repository = options?.queryRunner
             ? options.queryRunner.manager.getRepository(this.repository.target)

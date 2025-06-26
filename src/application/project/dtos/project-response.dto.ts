@@ -115,7 +115,7 @@ export class ProjectResponseDto {
     owner?: OwnerResponseDto;
 
     @Exclude()
-    deletedAt: Date;
+    deletedAt?: Date;
 
     @Exclude()
     members?: any[];

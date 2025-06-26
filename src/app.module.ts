@@ -5,8 +5,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './common/configs/typeorm.config';
 import { TerminusModule } from '@nestjs/terminus';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConfig } from './common/configs/jwt.config';
 import { AuthModule } from './application/auth/auth.module';
 import { ProjectModule } from './application/project/project.module';
 import { TaskModule } from './application/task/task.module';
@@ -16,25 +14,23 @@ import { ProjectMemberModule } from './application/project-member/project-member
 import { NotificationModule } from './application/notification/notification.module';
 import { IssueModule } from './application/issue/issue.module';
 import { ActivityLogModule } from './application/activity-log/activity-log.module';
+import { UserModule } from './application/user/user.module';
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: '.env',
+            envFilePath: ['.env'],
+            ignoreEnvFile: false,
+            cache: false, // 캐시 비활성화로 실시간 로딩
         }),
         TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
             useFactory: (configService: ConfigService) => typeOrmConfig(configService),
-            inject: [ConfigService],
-        }),
-        JwtModule.registerAsync({
-            global: true,
-            useFactory: jwtConfig,
             inject: [ConfigService],
         }),
         TerminusModule,
         AuthModule,
+        UserModule,
         ProjectModule,
         TaskModule,
         CommentModule,

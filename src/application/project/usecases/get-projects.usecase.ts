@@ -27,7 +27,7 @@ export class GetProjectsUseCase {
 
         const options: IRepositoryOptions<Project> = {
             where,
-            relations: ['owner', 'members'],
+            relations: ['owner', 'members', 'tasks'],
             order: {
                 createdAt: 'DESC',
             },
@@ -35,16 +35,13 @@ export class GetProjectsUseCase {
             take: limit,
         };
 
-        const [projects, total] = await this.projectService.getProjectsWithCounts(options);
+        const [projects, total] = await this.projectService.findAndCount(options);
 
         return {
             data: projects.map((project) => {
                 const response = plainToInstance(ProjectResponseDto, project);
-                // memberCount 계산
                 response.memberCount = project.members?.length || 0;
-
-                // taskCount는 별도 서비스를 통해 계산 (circular dependency 해결)
-                response.taskCount = 0; // 임시로 0 설정
+                response.taskCount = project.tasks?.length || 0;
                 return response;
             }),
             meta: {

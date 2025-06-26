@@ -3,6 +3,7 @@ import { InvitationModule as DomainInvitationModule } from '@src/domain/invitati
 import { DomainProjectModule } from '@src/domain/project/project.module';
 import { DomainUserModule } from '@src/domain/user/user.module';
 import { DomainProjectMemberModule } from '@src/domain/project-member/project-member.module';
+import { NotificationModule } from '@src/domain/notification/notification.module';
 
 // Controllers
 import { InvitationController } from './controllers/invitation.controller';
@@ -22,7 +23,13 @@ import {
 } from './usecases/index';
 
 @Module({
-    imports: [DomainInvitationModule, DomainProjectModule, DomainUserModule, DomainProjectMemberModule],
+    imports: [
+        DomainInvitationModule,
+        DomainProjectModule,
+        DomainUserModule,
+        DomainProjectMemberModule,
+        NotificationModule,
+    ],
     controllers: [InvitationController],
     providers: [
         InvitationService,

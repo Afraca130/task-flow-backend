@@ -1,7 +1,13 @@
 import { Injectable, Logger, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { DomainProjectMemberService } from '@src/domain/project-member/project-member.service';
 import { DomainProjectService } from '@src/domain/project/project.service';
+import { DomainUserService } from '@src/domain/user/user.service';
+import { DomainActivityLogService } from '@src/domain/activity-log/activity-log.service';
 import { ProjectMemberRole } from '@src/common/enums/project-member-role.enum';
+import { ActivityEntityType } from '@src/common/enums/activity-entity-type.enum';
+import { plainToInstance } from 'class-transformer';
+import { UpdateMemberRoleDto } from '../dtos/update-member-role.dto';
+import { ProjectMemberResponseDto } from '../dtos/project-member-response.dto';
 
 @Injectable()
 export class UpdateMemberRoleUseCase {
@@ -10,67 +16,94 @@ export class UpdateMemberRoleUseCase {
     constructor(
         private readonly projectMemberService: DomainProjectMemberService,
         private readonly projectService: DomainProjectService,
+        private readonly userService: DomainUserService,
+        private readonly activityLogService: DomainActivityLogService,
     ) {}
 
     async execute(
         projectId: string,
-        targetUserId: string,
-        newRole: ProjectMemberRole,
-        requestUserId: string,
-    ): Promise<void> {
-        this.logger.log(`Updating role for user: ${targetUserId} in project: ${projectId} to ${newRole}`);
+        memberId: string,
+        updateMemberRoleDto: UpdateMemberRoleDto,
+        currentUserId: string,
+    ): Promise<ProjectMemberResponseDto> {
+        this.logger.log(`Updating member role in project: ${projectId}, member: ${memberId} by user: ${currentUserId}`);
 
-        // 프로젝트 존재 여부 확인
-        const project = await this.projectService.findOne({
-            where: { id: projectId },
+        // 현재 사용자 정보 조회
+        const currentUser = await this.userService.findOne({
+            where: { id: currentUserId },
         });
-        console.log(project);
-        if (!project) {
-            throw new NotFoundException('프로젝트를 찾을 수 없습니다.');
+
+        if (!currentUser) {
+            throw new NotFoundException('현재 사용자를 찾을 수 없습니다.');
         }
 
-        // 요청자 권한 확인 (OWNER 또는 MANAGER만 역할 변경 가능)
-        const requestUserPermission = await this.projectMemberService.hasPermission(
+        // 권한 확인 (매니저 이상)
+        const hasPermission = await this.projectMemberService.hasPermission(
             projectId,
-            requestUserId,
+            currentUserId,
             ProjectMemberRole.MANAGER,
         );
 
-        if (!requestUserPermission) {
-            throw new ForbiddenException('멤버 역할을 변경할 권한이 없습니다.');
+        if (!hasPermission) {
+            throw new ForbiddenException('멤버 역할을 변경할 권한이 없습니다. 매니저 이상의 권한이 필요합니다.');
         }
 
-        // 대상 멤버 존재 여부 확인 - BaseService의 findOne 사용
+        // 대상 멤버 정보 조회
         const targetMember = await this.projectMemberService.findOne({
-            where: { projectId, userId: targetUserId, isActive: true },
+            where: { projectId, userId: memberId },
+            relations: ['user'],
         });
 
         if (!targetMember) {
-            throw new NotFoundException('해당 멤버를 찾을 수 없습니다.');
+            throw new NotFoundException('해당 프로젝트에서 멤버를 찾을 수 없습니다.');
         }
 
-        // 자기 자신의 OWNER 권한을 변경하려는 경우 방지
-        if (requestUserId === targetUserId && targetMember.role === ProjectMemberRole.OWNER) {
-            throw new BadRequestException('프로젝트 소유자는 자신의 권한을 변경할 수 없습니다.');
+        const oldRole = targetMember.role;
+        const newRole = updateMemberRoleDto.role;
+
+        // 역할이 동일한 경우
+        if (oldRole === newRole) {
+            return plainToInstance(ProjectMemberResponseDto, targetMember, {
+                excludeExtraneousValues: true,
+            });
         }
 
-        // 요청자가 MANAGER인 경우, OWNER로 변경하거나 OWNER의 권한을 변경할 수 없음
-        const requestMember = await this.projectMemberService.findOne({
-            where: { projectId, userId: requestUserId, isActive: true },
+        // 멤버 역할 업데이트
+        const updatedMember = await this.projectMemberService.update(targetMember.id, {
+            role: newRole,
         });
 
-        if (requestMember?.role === ProjectMemberRole.MANAGER) {
-            if (newRole === ProjectMemberRole.OWNER) {
-                throw new ForbiddenException('매니저는 소유자 권한을 부여할 수 없습니다.');
-            }
-            if (targetMember.role === ProjectMemberRole.OWNER) {
-                throw new ForbiddenException('매니저는 소유자의 권한을 변경할 수 없습니다.');
-            }
+        // Activity Log 기록
+        try {
+            const description = `${currentUser.name}님이 ${targetMember.user.name}님의 역할을 ${oldRole}에서 ${newRole}로 변경했습니다.`;
+            await this.activityLogService.logActivity(
+                currentUserId,
+                projectId,
+                targetMember.id,
+                ActivityEntityType.PROJECT_MEMBER,
+                'ROLE_UPDATED',
+                description,
+                {
+                    targetUserId: memberId,
+                    targetUserName: targetMember.user.name,
+                    oldRole: oldRole,
+                    newRole: newRole,
+                },
+            );
+        } catch (error) {
+            this.logger.error('Failed to log member role update activity', error);
         }
 
-        // 역할 업데이트 - BaseService의 update 사용
-        await this.projectMemberService.update(targetMember.id, { role: newRole });
+        // 관계 정보와 함께 멤버 조회
+        const memberWithRelations = await this.projectMemberService.findOne({
+            where: { id: updatedMember.id },
+            relations: ['user', 'project'],
+        });
 
-        this.logger.log(`Role updated successfully for user: ${targetUserId} to ${newRole}`);
+        this.logger.log(`Member role updated successfully: ${memberId}`);
+
+        return plainToInstance(ProjectMemberResponseDto, memberWithRelations, {
+            excludeExtraneousValues: true,
+        });
     }
 }

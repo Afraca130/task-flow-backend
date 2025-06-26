@@ -3,9 +3,12 @@ import { plainToInstance } from 'class-transformer';
 import { DomainCommentService } from '@src/domain/comment/comment.service';
 import { DomainTaskService } from '@src/domain/task/task.service';
 import { DomainProjectMemberService } from '@src/domain/project-member/project-member.service';
+import { DomainUserService } from '@src/domain/user/user.service';
+import { DomainActivityLogService } from '@src/domain/activity-log/activity-log.service';
 import { CreateCommentDto } from '../dtos/create-comment.dto';
 import { CommentResponseDto } from '../dtos/comment-response.dto';
 import { ProjectMemberRole } from '@src/common/enums/project-member-role.enum';
+import { ActivityEntityType } from '@src/common/enums/activity-entity-type.enum';
 
 @Injectable()
 export class CreateCommentUseCase {
@@ -15,6 +18,8 @@ export class CreateCommentUseCase {
         private readonly commentService: DomainCommentService,
         private readonly taskService: DomainTaskService,
         private readonly projectMemberService: DomainProjectMemberService,
+        private readonly userService: DomainUserService,
+        private readonly activityLogService: DomainActivityLogService,
     ) {}
 
     async execute(createCommentDto: CreateCommentDto, userId: string): Promise<CommentResponseDto> {
@@ -29,6 +34,15 @@ export class CreateCommentUseCase {
 
         if (!task) {
             throw new NotFoundException('태스크를 찾을 수 없습니다.');
+        }
+
+        // 사용자 정보 조회
+        const user = await this.userService.findOne({
+            where: { id: userId },
+        });
+
+        if (!user) {
+            throw new NotFoundException('사용자를 찾을 수 없습니다.');
         }
 
         // 프로젝트 멤버 권한 확인
@@ -63,7 +77,38 @@ export class CreateCommentUseCase {
         }
 
         // 댓글 생성
-        const comment = await this.commentService.createComment(content, taskId, userId, parentId);
+        const commentData = {
+            taskId,
+            userId,
+            content,
+            parentId,
+        };
+
+        const comment = await this.commentService.save(commentData);
+
+        // Activity Log 기록
+        try {
+            const commentType = parentId ? '대댓글' : '댓글';
+            const description = `${user.name}님이 "${task.title}" 작업에 ${commentType}을 작성했습니다.`;
+
+            await this.activityLogService.logActivity(
+                userId,
+                task.projectId,
+                comment.id,
+                ActivityEntityType.COMMENT,
+                'CREATED',
+                description,
+                {
+                    taskId: taskId,
+                    taskTitle: task.title,
+                    commentContent: content.substring(0, 100), // 내용 일부만 저장
+                    isReply: !!parentId,
+                    parentId: parentId,
+                },
+            );
+        } catch (error) {
+            this.logger.error('Failed to log comment creation activity', error);
+        }
 
         // 관계 정보와 함께 댓글 조회
         const commentWithRelations = await this.commentService.getCommentWithRelations(comment.id);

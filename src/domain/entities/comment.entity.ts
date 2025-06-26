@@ -4,9 +4,6 @@ import { User } from './user.entity';
 import { Task } from './task.entity';
 
 @Entity('comments')
-@Index(['taskId', 'createdAt'])
-@Index(['userId'])
-@Index(['parentId'])
 export class Comment extends Base {
     @Column({ type: 'text' })
     content: string;

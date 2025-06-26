@@ -29,6 +29,10 @@ export class DomainCommentService extends BaseService<Comment> {
     }
 
     async getCommentsByTaskId(taskId: string, options?: IRepositoryOptions<Comment>): Promise<Comment[]> {
+        return this.commentRepository.findByTaskIdFlat(taskId, options);
+    }
+
+    async getCommentsByTaskIdWithReplies(taskId: string, options?: IRepositoryOptions<Comment>): Promise<Comment[]> {
         return this.commentRepository.findByTaskIdWithReplies(taskId, options);
     }
 

@@ -6,17 +6,14 @@ import { User } from '@src/domain/entities/user.entity';
 export class GetTokenUsecase {
     constructor(private readonly jwtService: JwtService) {}
 
-    async execute(user: User) {
+    async execute(user: User): Promise<string> {
         const payload = {
             sub: user.id,
             email: user.email,
             type: 'access',
         };
 
-        const accessToken = this.jwtService.sign(payload, {
-            expiresIn: '1d',
-            secret: process.env.SUPABASE_JWT_SECRET,
-        });
+        const accessToken = this.jwtService.sign(payload);
 
         return accessToken;
     }

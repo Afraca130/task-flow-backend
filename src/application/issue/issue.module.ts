@@ -1,13 +1,23 @@
 import { Module } from '@nestjs/common';
 import { DomainIssueModule } from '@src/domain/issue/issue.module';
 import { DomainProjectMemberModule } from '@src/domain/project-member/project-member.module';
+import { DomainUserModule } from '@src/domain/user/user.module';
+import { DomainProjectModule } from '@src/domain/project/project.module';
+import { DomainActivityLogModule } from '@src/domain/activity-log/activity-log.module';
 import { NotificationModule } from '@src/domain/notification/notification.module';
 import { IssueController } from './controllers/issue.controller';
 import { IssueService } from './issue.service';
 import * as UseCases from './usecases';
 
 @Module({
-    imports: [DomainIssueModule, DomainProjectMemberModule, NotificationModule],
+    imports: [
+        DomainIssueModule,
+        DomainProjectMemberModule,
+        DomainUserModule,
+        DomainProjectModule,
+        DomainActivityLogModule,
+        NotificationModule,
+    ],
     controllers: [IssueController],
     providers: [
         IssueService,

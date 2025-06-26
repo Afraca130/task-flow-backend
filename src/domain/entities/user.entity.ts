@@ -1,6 +1,7 @@
 import { Base } from '@src/common/entity/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Project } from './project.entity';
+import { Comment } from './comment.entity';
 
 @Entity()
 export class User extends Base {
@@ -22,6 +23,12 @@ export class User extends Base {
     @Column({ default: null })
     lastLoginAt: Date;
 
+    @Column({ name: 'last_project_id', type: 'uuid', nullable: true })
+    lastProjectId: string;
+
     @OneToMany(() => Project, (project) => project.owner)
     projects: Project[];
+
+    @OneToMany(() => Comment, (comment) => comment.user)
+    comments: Comment[];
 }

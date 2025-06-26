@@ -31,7 +31,6 @@ export class ProjectService {
 
     async getProjectById(projectId: string): Promise<ProjectResponseDto> {
         const project = await this.getProjectByIdUseCase.execute(projectId);
-        console.log(project);
         return this.getProjectByIdUseCase.execute(projectId);
     }
 

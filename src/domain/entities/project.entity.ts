@@ -4,12 +4,13 @@ import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany } fr
 import { User } from './user.entity';
 import { ProjectMember } from './project-member.entity';
 import { Exclude } from 'class-transformer';
+import { Task } from './task.entity';
 
 @Entity()
 export class Project extends Base {
     @Exclude()
     @DeleteDateColumn({ nullable: true })
-    deletedAt: Date;
+    deletedAt?: Date;
 
     @Column()
     name: string;
@@ -41,11 +42,11 @@ export class Project extends Base {
 
     @ManyToOne(() => User)
     @JoinColumn({ name: 'ownerId' })
-    owner: User;
+    owner?: User;
 
     @OneToMany(() => ProjectMember, (member) => member.project)
-    members: ProjectMember[];
+    members?: ProjectMember[];
 
-    // Task 관계는 circular dependency를 피하기 위해 제거
-    // tasks는 Task 서비스를 통해 별도로 조회
+    @OneToMany(() => Task, (task) => task.project)
+    tasks?: Task[];
 }

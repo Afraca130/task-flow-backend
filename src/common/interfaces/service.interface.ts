@@ -1,4 +1,4 @@
-import { DeepPartial, ObjectLiteral } from 'typeorm';
+import { DeepPartial, DeleteResult, ObjectLiteral } from 'typeorm';
 import { IRepositoryOptions } from './repository.interface';
 
 export interface IService<T extends ObjectLiteral> {

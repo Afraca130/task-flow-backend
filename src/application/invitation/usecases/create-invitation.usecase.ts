@@ -6,7 +6,9 @@ import { ProjectInvitationResponseDto } from '../dtos/invitation-response.dto';
 import { DomainInvitationService } from '@src/domain/invitation/invitation.service';
 import { DomainProjectService } from '@src/domain/project/project.service';
 import { DomainUserService } from '@src/domain/user/user.service';
+import { DomainNotificationService } from '@src/domain/notification/notification.service';
 import { InvitationStatus } from '@src/common/enums/invitation-status.enum';
+import { NotificationType } from '@src/common/enums/notification-type.enum';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -17,6 +19,7 @@ export class CreateInvitationUseCase {
         private readonly invitationService: DomainInvitationService,
         private readonly projectService: DomainProjectService,
         private readonly userService: DomainUserService,
+        private readonly notificationService: DomainNotificationService,
         private readonly dataSource: DataSource,
     ) {}
 
@@ -36,6 +39,16 @@ export class CreateInvitationUseCase {
 
             if (!project) {
                 throw new NotFoundException('프로젝트를 찾을 수 없습니다.');
+            }
+
+            // 초대자 정보 조회
+            const inviter = await this.userService.findOne({
+                where: { id: inviterId },
+                queryRunner,
+            });
+
+            if (!inviter) {
+                throw new NotFoundException('초대자를 찾을 수 없습니다.');
             }
 
             // 프로젝트 접근 권한 확인 (소유자만 초대 가능)
@@ -75,6 +88,36 @@ export class CreateInvitationUseCase {
             };
 
             const savedInvitation = await this.invitationService.save(invitationData, { queryRunner });
+
+            // 초대받은 사용자에게 알림 발송
+            if (inviteeUser) {
+                try {
+                    await this.notificationService.save(
+                        {
+                            userId: inviteeUser.id,
+                            type: NotificationType.PROJECT_INVITATION_RECEIVED,
+                            title: '프로젝트 초대를 받았습니다',
+                            message: `${inviter.name}님이 "${project.name}" 프로젝트에 초대했습니다.`,
+                            data: {
+                                invitationId: savedInvitation.id,
+                                invitationToken: savedInvitation.token,
+                                projectId: project.id,
+                                projectName: project.name,
+                                inviterId: inviterId,
+                                inviterName: inviter.name,
+                                message: createInvitationDto.message,
+                                expiresAt: invitationData.expiresAt.toISOString(),
+                            },
+                        },
+                        { queryRunner },
+                    );
+
+                    this.logger.log(`Invitation notification sent to user: ${inviteeUser.id}`);
+                } catch (error) {
+                    this.logger.error('Failed to send invitation notification', error);
+                    // 알림 발송 실패는 전체 프로세스를 중단시키지 않음
+                }
+            }
 
             const invitation = await this.invitationService.findOne({
                 where: { token: savedInvitation.token },

@@ -63,7 +63,7 @@ export class ProjectMemberController {
         format: 'uuid',
         example: 'uuid-v4-string',
     })
-    @ApiDataResponse(null, {
+    @ApiDataResponse(ProjectMemberResponseDto, {
         status: HttpStatus.OK,
         description: '멤버 역할 변경 성공',
         additionalErrors: [
@@ -78,7 +78,7 @@ export class ProjectMemberController {
         @Param('userId', ParseUUIDPipe) targetUserId: string,
         @Body() updateRoleDto: UpdateMemberRoleDto,
         @User('id') requestUserId: string,
-    ): Promise<void> {
+    ): Promise<ProjectMemberResponseDto> {
         return this.projectMemberService.updateMemberRole(projectId, targetUserId, updateRoleDto.role, requestUserId);
     }
 

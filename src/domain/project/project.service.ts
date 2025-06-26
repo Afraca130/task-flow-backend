@@ -31,10 +31,9 @@ export class DomainProjectService extends BaseService<Project> {
         });
     }
 
-    async getProjectsWithCounts(options: IRepositoryOptions<Project>): Promise<[Project[], number]> {
+    async findAndCount(options: IRepositoryOptions<Project>): Promise<[Project[], number]> {
         return this.projectRepository.findAndCount({
             ...options,
-            relations: ['owner', 'members'],
         });
     }
 
@@ -75,34 +74,4 @@ export class DomainProjectService extends BaseService<Project> {
 
         return projects.filter((project) => project.dueDate && new Date(project.dueDate) <= date);
     }
-
-    // async getProjectsByOwnerId(ownerId: string): Promise<Project[]> {
-    //     return this.projectRepository.findAll({ where: { ownerId } });
-    // }
-
-    // async getProjectByInviteCode(inviteCode: string): Promise<Project | null> {
-    //     return this.projectRepository.findOne({ where: { inviteCode } });
-    // }
-
-    // async getProjectsByStatus(status: ProjectStatus): Promise<Project[]> {
-    //     return this.projectRepository.findAll({ where: { status } });
-    // }
-
-    // async regenerateInviteCode(id: string, userId?: string): Promise<string> {
-    //     const project = await this.findOne({ where: { id } as any });
-    //     if (!project) {
-    //         throw new NotFoundException('프로젝트를 찾을 수 없습니다.');
-    //     }
-
-    //     // 소유자 권한 체크
-    //     if (userId && project.ownerId !== userId) {
-    //         throw new ForbiddenException('초대 코드를 재생성할 권한이 없습니다.');
-    //     }
-
-    //     const newInviteCode = this.generateInviteCode();
-    //     project.inviteCode = newInviteCode;
-
-    //     await this.projectRepository.save(project);
-    //     return newInviteCode;
-    // }
 }

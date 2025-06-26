@@ -8,12 +8,12 @@ import { DomainUserService } from '@src/domain/user/user.service';
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(
         private readonly userService: DomainUserService,
-        configService: ConfigService,
+        private readonly configService: ConfigService,
     ) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: configService.get('SUPABASE_JWT_SECRET'),
+            secretOrKey: configService.get<string>('SUPABASE_JWT_SECRET') || 'default-secret-key',
         });
     }
 
