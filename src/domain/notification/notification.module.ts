@@ -9,4 +9,4 @@ import { DomainNotificationService } from './notification.service';
     providers: [DomainNotificationRepository, DomainNotificationService],
     exports: [DomainNotificationRepository, DomainNotificationService],
 })
-export class NotificationModule {}
+export class DomainNotificationModule {}

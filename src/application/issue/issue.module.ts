@@ -4,7 +4,7 @@ import { DomainProjectMemberModule } from '@src/domain/project-member/project-me
 import { DomainUserModule } from '@src/domain/user/user.module';
 import { DomainProjectModule } from '@src/domain/project/project.module';
 import { DomainActivityLogModule } from '@src/domain/activity-log/activity-log.module';
-import { NotificationModule } from '@src/domain/notification/notification.module';
+import { DomainNotificationModule } from '@src/domain/notification/notification.module';
 import { IssueController } from './controllers/issue.controller';
 import { IssueService } from './issue.service';
 import * as UseCases from './usecases';
@@ -16,7 +16,7 @@ import * as UseCases from './usecases';
         DomainUserModule,
         DomainProjectModule,
         DomainActivityLogModule,
-        NotificationModule,
+        DomainNotificationModule,
     ],
     controllers: [IssueController],
     providers: [

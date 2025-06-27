@@ -9,4 +9,4 @@ import { DomainInvitationService } from './invitation.service';
     providers: [DomainInvitationRepository, DomainInvitationService],
     exports: [DomainInvitationRepository, DomainInvitationService],
 })
-export class InvitationModule {}
+export class DomainInvitationModule {}

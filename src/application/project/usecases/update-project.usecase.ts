@@ -7,7 +7,6 @@ import {
     Logger,
 } from '@nestjs/common';
 import { DomainProjectService } from '@src/domain/project/project.service';
-import { DomainUserService } from '@src/domain/user/user.service';
 import { DomainActivityLogService } from '@src/domain/activity-log/activity-log.service';
 import { plainToInstance } from 'class-transformer';
 import { UpdateProjectDto, ProjectResponseDto } from '@src/application/project/dtos';
@@ -19,7 +18,6 @@ export class UpdateProjectUseCase {
 
     constructor(
         private readonly projectService: DomainProjectService,
-        private readonly userService: DomainUserService,
         private readonly activityLogService: DomainActivityLogService,
     ) {}
 
@@ -31,15 +29,6 @@ export class UpdateProjectUseCase {
         const project = await this.projectService.findOne({ where: { id: projectId } });
         if (!project) {
             throw new NotFoundException('프로젝트를 찾을 수 없습니다.');
-        }
-
-        // 사용자 정보 조회
-        const user = await this.userService.findOne({
-            where: { id: userId },
-        });
-
-        if (!user) {
-            throw new NotFoundException('사용자를 찾을 수 없습니다.');
         }
 
         // 소유자 권한 체크
@@ -119,7 +108,7 @@ export class UpdateProjectUseCase {
             // Activity Log 기록 (변경사항이 있는 경우만)
             if (changes.length > 0) {
                 try {
-                    const description = `${user.name}님이 "${project.name}" 프로젝트를 수정했습니다: ${changes.join(', ')}`;
+                    const description = `"${project.name}" 프로젝트를 수정했습니다: ${changes.join(', ')}`;
                     await this.activityLogService.logActivity(
                         userId,
                         projectId,

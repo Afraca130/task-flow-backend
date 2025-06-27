@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { InvitationModule as DomainInvitationModule } from '@src/domain/invitation/invitation.module';
+import { DomainInvitationModule } from '@src/domain/invitation/invitation.module';
 import { DomainProjectModule } from '@src/domain/project/project.module';
 import { DomainUserModule } from '@src/domain/user/user.module';
 import { DomainProjectMemberModule } from '@src/domain/project-member/project-member.module';
-import { NotificationModule } from '@src/domain/notification/notification.module';
+import { DomainNotificationModule } from '@src/domain/notification/notification.module';
 
 // Controllers
 import { InvitationController } from './controllers/invitation.controller';
@@ -28,7 +28,7 @@ import {
         DomainProjectModule,
         DomainUserModule,
         DomainProjectMemberModule,
-        NotificationModule,
+        DomainNotificationModule,
     ],
     controllers: [InvitationController],
     providers: [

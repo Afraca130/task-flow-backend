@@ -19,7 +19,6 @@
         "noFallthroughCasesInSwitch": false,
         "paths": {
             "*": ["./node_modules/*"],
-            "@/*": ["src/*"],
             "@src/*": ["src/*"],
             "@libs/*": ["src/common/*"],
             "@common/*": ["src/common/*"]

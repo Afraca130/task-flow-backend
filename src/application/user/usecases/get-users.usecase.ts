@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DomainUserService } from '@/domain/user/user.service';
+import { DomainUserService } from '@src/domain/user/user.service';
 import { UserResponseDto } from '../dtos/user-response.dto';
-import { PaginationData } from '@/common/dtos';
+import { PaginationData } from '@src/common/dtos';
 
 @Injectable()
 export class GetUsersUseCase {

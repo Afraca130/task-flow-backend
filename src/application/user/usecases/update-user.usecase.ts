@@ -1,10 +1,10 @@
 import { Injectable, Logger, NotFoundException, ForbiddenException, ConflictException } from '@nestjs/common';
-import { DomainUserService } from '@/domain/user/user.service';
-import { DomainProjectService } from '@/domain/project/project.service';
-import { DomainProjectMemberService } from '@/domain/project-member/project-member.service';
+import { DomainUserService } from '@src/domain/user/user.service';
+import { DomainProjectService } from '@src/domain/project/project.service';
+import { DomainProjectMemberService } from '@src/domain/project-member/project-member.service';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UserResponseDto } from '../dtos/user-response.dto';
-import { ProjectMemberRole } from '@/common/enums/project-member-role.enum';
+import { ProjectMemberRole } from '@src/common/enums/project-member-role.enum';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

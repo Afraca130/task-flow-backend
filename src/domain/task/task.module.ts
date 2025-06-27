@@ -9,4 +9,4 @@ import { DomainTaskService } from './task.service';
     providers: [DomainTaskRepository, DomainTaskService],
     exports: [DomainTaskRepository, DomainTaskService],
 })
-export class TaskModule {}
+export class DomainTaskModule {}

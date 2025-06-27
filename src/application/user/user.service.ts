@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GetUserProjectsUseCase } from './usecase/get-user-projects.usecase';
-import { GetUsersUseCase, SearchUsersUseCase, UpdateUserUseCase } from './usecases';
+import { GetUserProjectsUseCase, GetUsersUseCase, SearchUsersUseCase, UpdateUserUseCase } from './usecases';
 import { SearchUsersQueryDto, UpdateUserDto } from './dtos';
 
 @Injectable()

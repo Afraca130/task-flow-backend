@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NotificationModule as DomainNotificationModule } from '@src/domain/notification/notification.module';
+import { DomainNotificationModule } from '@src/domain/notification/notification.module';
 
 // Controllers
 import { NotificationController } from './controllers/notification.controller';

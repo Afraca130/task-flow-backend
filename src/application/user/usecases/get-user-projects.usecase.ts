@@ -1,8 +1,8 @@
-import { ProjectResponseDto } from '@/application/project/dtos';
-import { PaginationData } from '@/common/dtos';
-import { IRepositoryOptions } from '@/common/interfaces/repository.interface';
-import { User } from '@/domain/entities/user.entity';
-import { DomainUserService } from '@/domain/user/user.service';
+import { ProjectResponseDto } from '@src/application/project/dtos';
+import { PaginationData } from '@src/common/dtos';
+import { IRepositoryOptions } from '@src/common/interfaces/repository.interface';
+import { User } from '@src/domain/entities/user.entity';
+import { DomainUserService } from '@src/domain/user/user.service';
 import { Injectable } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 

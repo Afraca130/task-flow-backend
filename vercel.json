@@ -8,7 +8,9 @@
             "src": "api/index.ts",
             "use": "@vercel/node",
             "config": {
-                "includeFiles": ["dist/**", "api/module-aliases.js"]
+                "includeFiles": ["dist/**", "api/module-aliases.js"],
+                "bundle": false,
+                "helpers": false
             }
         }
     ],

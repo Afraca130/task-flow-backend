@@ -1,11 +1,11 @@
-import { DomainUserModule } from '@/domain/user/user.module';
-import { DomainProjectModule } from '@/domain/project/project.module';
-import { DomainProjectMemberModule } from '@/domain/project-member/project-member.module';
+import { DomainUserModule } from '@src/domain/user/user.module';
+import { DomainProjectModule } from '@src/domain/project/project.module';
+import { DomainProjectMemberModule } from '@src/domain/project-member/project-member.module';
 import { Module } from '@nestjs/common';
-import { UserController } from './controllers/user.controller';
+// import { UserController } from './controllers/user.controller.ts.ds';
 import { UserService } from './user.service';
-import { GetUserProjectsUseCase } from './usecase/get-user-projects.usecase';
-import { GetUsersUseCase, SearchUsersUseCase, UpdateUserUseCase } from './usecases';
+import { GetUserProjectsUseCase, GetUsersUseCase, SearchUsersUseCase, UpdateUserUseCase } from './usecases';
+import { UserController } from './controllers/user.controller';
 
 @Module({
     imports: [DomainUserModule, DomainProjectModule, DomainProjectMemberModule],
