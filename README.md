@@ -418,7 +418,7 @@ POSTGRES_PASSWORD=your_password
 POSTGRES_DATABASE=taskflow
 
 # JWT 설정
-JWT_SECRET=your-super-secret-jwt-key
+SUPABASE_JWT_SECRET=your-super-secret-jwt-key
 JWT_EXPIRES_IN=7d
 
 # 애플리케이션 설정
@@ -473,18 +473,6 @@ vercel --prod
 - TypeScript 모범 사례 준수
 - 컨벤셔널 커밋 사용
 
-## 📄 라이선스
-
-이 프로젝트는 MIT 라이센스로 라이센스됩니다 - 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
-
-## 🆘 지원
-
-지원 및 질문:
-
-- GitHub 저장소에 이슈 생성
-- `/api/docs`에서 API 문서 확인
-- 사용 예제는 테스트 케이스 검토
-
 ## 🚀 로드맵
 
 - [ ] WebSocket을 사용한 실시간 협업
@@ -496,16 +484,3 @@ vercel --prod
 - [ ] 통합을 위한 웹훅 시스템
 
 ---
-
-<div align="center">
-  <h3>🌟 NestJS 정보</h3>
-  
-  <p>Nest는 MIT 라이센스 오픈 소스 프로젝트입니다. 놀라운 후원자들의 지원으로 성장할 수 있습니다.</p>
-  
-  <p>
-    <strong>연락처</strong><br>
-    Author - <a href="https://twitter.com/kammysliwiec">Kamil Myśliwiec</a><br>
-    Website - <a href="https://nestjs.com">https://nestjs.com</a><br>
-    Twitter - <a href="https://twitter.com/nestframework">@nestframework</a>
-  </p>
-</div>
