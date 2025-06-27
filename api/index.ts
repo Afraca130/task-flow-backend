@@ -32,11 +32,7 @@ async function createNestApp(): Promise<NestExpressApplication> {
 
         // CORS 설정
         app.enableCors({
-            origin: [
-                'http://localhost:3000',
-                'https://task-flow-frontend-88nu.vercel.app',
-                'https://your-domain.com', // 필요시 실제 도메인으로 변경
-            ],
+            origin: ['http://localhost:3000', 'https://task-flow-frontend-88nu.vercel.app'],
             credentials: true,
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
             allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],

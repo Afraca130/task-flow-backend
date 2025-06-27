@@ -1,371 +1,511 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+<div align="center">
+  <a href="http://nestjs.com/" target="blank">
+    <img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" />
+  </a>
+</div>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<div align="center">
+  <p>A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+  
+  <p>
+    <a href="https://www.npmjs.com/~nestjscore" target="_blank">
+      <img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" />
+    </a>
+    <a href="https://www.npmjs.com/~nestjscore" target="_blank">
+      <img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" />
+    </a>
+    <a href="https://www.npmjs.com/~nestjscore" target="_blank">
+      <img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" />
+    </a>
+  </p>
+  
+  <p>
+    <a href="https://circleci.com/gh/nestjs/nest" target="_blank">
+      <img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" />
+    </a>
+    <a href="https://discord.gg/G7Qnnhy" target="_blank">
+      <img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/>
+    </a>
+    <a href="https://opencollective.com/nest#backer" target="_blank">
+      <img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" />
+    </a>
+  </p>
+  
+  <p>
+    <a href="https://opencollective.com/nest#sponsor" target="_blank">
+      <img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" />
+    </a>
+    <a href="https://paypal.me/kamilmysliwiec" target="_blank">
+      <img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/>
+    </a>
+    <a href="https://twitter.com/nestframework" target="_blank">
+      <img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter">
+    </a>
+  </p>
+</div>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ pnpm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
-```
+---
 
 # TaskFlow Backend
 
-Clean Architecture NestJS API with comprehensive documentation
+<div align="center">
+  <h3>🚀 Modern Project Management Backend API</h3>
+  <p>Built with NestJS, following Clean Architecture principles and comprehensive Swagger documentation.</p>
+</div>
 
-## Overview
+## 📋 목차
 
-This is a backend application for TaskFlow, built with NestJS following Clean Architecture principles. The application provides comprehensive project management features including tasks, projects, members, comments, issues, notifications, and activity logging.
+- [개요](#-개요)
+- [주요 기능](#-주요-기능)
+- [기술 스택](#-기술-스택)
+- [아키텍처](#-아키텍처)
+- [빠른 시작](#-빠른-시작)
+- [API 문서](#-api-문서)
+- [데이터베이스 스키마](#-데이터베이스-스키마)
+- [설정](#-설정)
+- [테스트](#-테스트)
+- [배포](#-배포)
 
-## Architecture
+## 🚀 개요
 
-The project follows Clean Architecture principles with clear separation of concerns:
+TaskFlow Backend는 팀 협업, 작업 관리, 프로젝트 추적을 위한 강력하고 확장 가능한 API입니다. 실시간 알림과 상세한 활동 로깅을 제공합니다.
 
-- **Domain Layer**: Core business entities and rules
-- **Application Layer**: Use cases and business logic
-- **Infrastructure Layer**: External adapters and repositories
-- **Presentation Layer**: Controllers, DTOs, and API documentation
+## ✨ 주요 기능
 
-## Features
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <h4>🔐 인증 및 보안</h4>
+      <ul align="left">
+        <li>JWT 기반 인증 (Refresh Token)</li>
+        <li>역할 기반 접근 제어</li>
+        <li>bcrypt 패스워드 해싱</li>
+        <li>API 키 지원</li>
+      </ul>
+    </td>
+    <td align="center" width="50%">
+      <h4>📊 프로젝트 관리</h4>
+      <ul align="left">
+        <li>완전한 프로젝트 생명주기 관리</li>
+        <li>상태 추적 시스템</li>
+        <li>우선순위 레벨 관리</li>
+        <li>멤버 초대 시스템</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <h4>✅ 작업 관리</h4>
+      <ul align="left">
+        <li>포괄적인 작업 시스템</li>
+        <li>작업 우선순위 및 할당</li>
+        <li>마감일 관리</li>
+        <li>대량 작업 지원</li>
+      </ul>
+    </td>
+    <td align="center" width="50%">
+      <h4>🐛 이슈 추적</h4>
+      <ul align="left">
+        <li>버그 리포트 시스템</li>
+        <li>기능 요청 관리</li>
+        <li>이슈 타입 분류</li>
+        <li>프로젝트 워크플로우 통합</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-- **Authentication & Authorization**: JWT-based authentication with role-based access control
-- **Project Management**: Create, manage, and collaborate on projects
-- **Task Management**: Comprehensive task system with priorities, assignments, and status tracking
-- **Member Management**: Project member roles and permissions
-- **Issue Tracking**: Bug reports, feature requests, and discussions
-- **Comments**: Hierarchical comment system for tasks and issues
-- **Notifications**: Real-time notification system
-- **Activity Logging**: Comprehensive audit trail of all user actions
-- **API Documentation**: Complete Swagger/OpenAPI documentation
+<div align="center">
+  <h4>📢 추가 기능</h4>
+  <p>
+    <strong>💬 계층형 댓글 시스템</strong> • 
+    <strong>🔔 실시간 알림</strong> • 
+    <strong>📋 활동 로깅</strong> • 
+    <strong>👥 사용자 관리</strong>
+  </p>
+</div>
 
-## Tech Stack
+## 🛠 기술 스택
 
-- **Framework**: NestJS
-- **Database**: PostgreSQL with TypeORM
-- **Authentication**: Passport.js with JWT
-- **Validation**: class-validator, class-transformer
-- **Documentation**: Swagger/OpenAPI
-- **Deployment**: Vercel Serverless Functions
+<div align="center">
+  <table>
+    <tr>
+      <th>카테고리</th>
+      <th>기술</th>
+    </tr>
+    <tr>
+      <td align="center"><strong>Framework</strong></td>
+      <td align="center">
+        <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS">
+      </td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Language</strong></td>
+      <td align="center">
+        <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+      </td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Database</strong></td>
+      <td align="center">
+        <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+        <img src="https://img.shields.io/badge/TypeORM-FF6B6B?style=for-the-badge&logo=typeorm&logoColor=white" alt="TypeORM">
+      </td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Authentication</strong></td>
+      <td align="center">
+        <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" alt="JWT">
+      </td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Documentation</strong></td>
+      <td align="center">
+        <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger">
+      </td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Testing</strong></td>
+      <td align="center">
+        <img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white" alt="Jest">
+      </td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Deployment</strong></td>
+      <td align="center">
+        <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel">
+      </td>
+    </tr>
+  </table>
+</div>
 
-## Quick Start
+## 🏗 아키텍처
 
-### Prerequisites
+### Clean Architecture 구현
 
-- Node.js (v18 or higher)
-- PostgreSQL database
-- npm or yarn
+```
+src/
+├── application/           # 애플리케이션 계층
+│   ├── auth/             # 인증 유스케이스
+│   ├── project/          # 프로젝트 관리
+│   ├── task/             # 작업 관리
+│   ├── issue/            # 이슈 추적
+│   ├── comment/          # 댓글 시스템
+│   ├── notification/     # 알림 시스템
+│   ├── activity-log/     # 활동 로깅
+│   └── user/             # 사용자 관리
+├── domain/               # 도메인 계층
+│   ├── entities/         # 핵심 비즈니스 엔티티
+│   └── */               # 도메인 서비스 & 리포지토리
+├── common/               # 공통 유틸리티
+│   ├── decorators/       # 커스텀 데코레이터
+│   ├── guards/           # 인증 가드
+│   ├── interceptors/     # 인터셉터
+│   └── enums/           # 애플리케이션 열거형
+└── main.ts              # 애플리케이션 진입점
+```
 
-### Installation
+<div align="center">
+  <h4>계층별 책임</h4>
+  <table>
+    <tr>
+      <td align="center"><strong>Domain Layer</strong></td>
+      <td>핵심 비즈니스 엔티티와 규칙</td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Application Layer</strong></td>
+      <td>유스케이스와 비즈니스 로직 오케스트레이션</td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Infrastructure Layer</strong></td>
+      <td>외부 어댑터 (데이터베이스, 이메일 등)</td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Presentation Layer</strong></td>
+      <td>컨트롤러, DTO, API 문서</td>
+    </tr>
+  </table>
+</div>
 
-1. Clone the repository:
+## 🚀 빠른 시작
+
+### 사전 요구사항
+
+- Node.js 18+
+- PostgreSQL 13+
+- npm 또는 yarn
+
+### 설치
+
+**1. 저장소 클론**
 
 ```bash
 git clone <repository-url>
 cd TaskFlowBackend
 ```
 
-2. Install dependencies:
+**2. 의존성 설치**
 
 ```bash
 npm install
 ```
 
-3. Set up environment variables:
+**3. 환경 설정**
 
 ```bash
 cp .env.example .env
-# Edit .env with your database and other configuration
+# 환경 변수 구성하기
 ```
 
-4. Run database migrations (if needed):
+**4. 데이터베이스 설정**
 
 ```bash
+# 데이터베이스 생성
+createdb taskflow
+
+# 마이그레이션 실행 (있는 경우)
 npm run typeorm:migration:run
 ```
 
-5. Start the development server:
+**5. 개발 서버 시작**
 
 ```bash
 npm run start:dev
 ```
 
-The API will be available at `http://localhost:3000`
+<div align="center">
+  <h3>🎉 API가 실행되었습니다!</h3>
+  <p>
+    <strong>API Base URL:</strong> <code>http://localhost:3000</code><br>
+    <strong>Swagger 문서:</strong> <code>http://localhost:3000/api/docs</code>
+  </p>
+</div>
 
-API Documentation will be available at `http://localhost:3000/api/docs`
+## 📚 API 문서
 
-## Environment Variables
+### Swagger/OpenAPI 기능
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">🔍 <strong>대화형 API 탐색기</strong></td>
+      <td>브라우저에서 직접 엔드포인트 테스트</td>
+    </tr>
+    <tr>
+      <td align="center">📖 <strong>완전한 스키마 문서</strong></td>
+      <td>모든 DTO와 엔티티 문서화</td>
+    </tr>
+    <tr>
+      <td align="center">🔐 <strong>인증 예제</strong></td>
+      <td>JWT 및 API 키 인증</td>
+    </tr>
+    <tr>
+      <td align="center">⚠️ <strong>에러 응답 예제</strong></td>
+      <td>표준화된 에러 형식</td>
+    </tr>
+  </table>
+</div>
+
+**문서 접근:** `http://localhost:3000/api/docs`
+
+### 주요 API 엔드포인트
+
+<details>
+<summary><strong>🔐 Authentication</strong></summary>
+
+```
+POST   /auth/register         # 사용자 등록
+POST   /auth/login           # 사용자 로그인
+POST   /auth/refresh         # 토큰 갱신
+```
+
+</details>
+
+<details>
+<summary><strong>📊 Projects</strong></summary>
+
+```
+GET    /projects             # 프로젝트 목록
+POST   /projects             # 프로젝트 생성
+GET    /projects/:id         # 프로젝트 상세
+PATCH  /projects/:id         # 프로젝트 수정
+DELETE /projects/:id         # 프로젝트 삭제
+```
+
+</details>
+
+<details>
+<summary><strong>✅ Tasks</strong></summary>
+
+```
+GET    /tasks                # 작업 목록
+POST   /tasks                # 작업 생성
+GET    /tasks/:id            # 작업 상세
+PATCH  /tasks/:id            # 작업 수정
+DELETE /tasks/:id            # 작업 삭제
+```
+
+</details>
+
+<details>
+<summary><strong>🐛 Issues</strong></summary>
+
+```
+GET    /issues               # 이슈 목록
+POST   /issues               # 이슈 생성
+GET    /issues/:id           # 이슈 상세
+PATCH  /issues/:id           # 이슈 수정
+DELETE /issues/:id           # 이슈 삭제
+```
+
+</details>
+
+## 🗄 데이터베이스 스키마
+
+### 핵심 엔티티
+
+<div align="center">
+  <table>
+    <tr>
+      <th>엔티티</th>
+      <th>설명</th>
+    </tr>
+    <tr>
+      <td><strong>User</strong></td>
+      <td>사용자 프로필 및 인증</td>
+    </tr>
+    <tr>
+      <td><strong>Project</strong></td>
+      <td>프로젝트 정보 및 설정</td>
+    </tr>
+    <tr>
+      <td><strong>ProjectMember</strong></td>
+      <td>역할을 가진 프로젝트 멤버십</td>
+    </tr>
+    <tr>
+      <td><strong>Task</strong></td>
+      <td>상태 추적이 있는 작업 관리</td>
+    </tr>
+    <tr>
+      <td><strong>Issue</strong></td>
+      <td>이슈 추적 및 버그 리포트</td>
+    </tr>
+    <tr>
+      <td><strong>Comment</strong></td>
+      <td>계층형 댓글 시스템</td>
+    </tr>
+    <tr>
+      <td><strong>Notification</strong></td>
+      <td>사용자 알림 시스템</td>
+    </tr>
+    <tr>
+      <td><strong>ActivityLog</strong></td>
+      <td>포괄적인 감사 로깅</td>
+    </tr>
+  </table>
+</div>
+
+## 🔧 설정
+
+### 환경 변수
 
 ```env
-# Database
+# 데이터베이스 설정
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=password
+POSTGRES_PASSWORD=your_password
 POSTGRES_DATABASE=taskflow
 
-# JWT
-JWT_SECRET=your-secret-key
+# JWT 설정
+JWT_SECRET=your-super-secret-jwt-key
 JWT_EXPIRES_IN=7d
 
-# Application
-API_PREFIX=v1
+# 애플리케이션 설정
 NODE_ENV=development
 PORT=3000
+API_PREFIX=v1
 
-# CORS
+# CORS 설정
 ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
 ```
 
-## Database Migration
-
-### Development Environment
-
-In development, the application uses `synchronize: true` which automatically updates the database schema based on your entities.
-
-### Production Environment
-
-For production, use migrations to safely update the database schema:
+## 🧪 테스트
 
 ```bash
-# Generate a new migration
-npm run typeorm:migration:generate -- src/migrations/MigrationName
+# 단위 테스트
+npm run test
 
-# Run pending migrations
-npm run typeorm:migration:run
+# E2E 테스트
+npm run test:e2e
 
-# Revert the last migration
-npm run typeorm:migration:revert
+# 테스트 커버리지
+npm run test:cov
+
+# 감시 모드
+npm run test:watch
 ```
 
-### Project Schema Migration
+## 📦 배포
 
-The project includes a migration (`UpdateProjectSchema1735125020000`) that updates the Project entity with new fields:
+### Vercel 배포
 
-**Added Fields:**
-
-- `color`: Project color (HEX code, default: '#3B82F6')
-- `priority`: Project priority (LOW, MEDIUM, HIGH, URGENT)
-- `dueDate`: Project due date (nullable timestamp)
-- `isActive`: Project active status (boolean, default: true)
-
-**Removed Fields:**
-
-- `status`, `startDate`, `endDate`, `inviteCode`, `approvalType`
-
-The migration safely preserves existing data by:
-
-- Mapping old `status` values to new `isActive` field
-- Converting `endDate` to `dueDate` where applicable
-- Checking for column existence before dropping
-
-## API Endpoints
-
-### Authentication
-
-- `POST /api/v1/auth/register` - User registration
-- `POST /api/v1/auth/login` - User login
-
-### Projects
-
-- `GET /api/v1/projects` - List projects with pagination
-- `POST /api/v1/projects` - Create new project
-- `GET /api/v1/projects/:id` - Get project details
-- `PUT /api/v1/projects/:id` - Update project
-- `DELETE /api/v1/projects/:id` - Delete project
-
-### Tasks
-
-- `GET /api/v1/tasks` - List tasks with filtering
-- `POST /api/v1/tasks` - Create new task
-- `GET /api/v1/tasks/:id` - Get task details
-- `PUT /api/v1/tasks/:id` - Update task
-- `PUT /api/v1/tasks/:id/status` - Update task status
-- `DELETE /api/v1/tasks/:id` - Delete task
-
-### Project Members
-
-- `GET /api/v1/project-members/project/:id` - Get project members
-- `PUT /api/v1/project-members/:id/role` - Update member role
-- `DELETE /api/v1/project-members/:id` - Remove member
-
-### Issues
-
-- `GET /api/v1/issues` - List issues with filtering
-- `POST /api/v1/issues` - Create new issue
-- `POST /api/v1/issues/mentions` - Create issue with mentions
-- `PUT /api/v1/issues/:id` - Update issue
-- `DELETE /api/v1/issues/:id` - Delete issue
-
-### Comments
-
-- `GET /api/v1/comments/task/:taskId` - Get task comments
-- `POST /api/v1/comments` - Create comment
-- `PUT /api/v1/comments/:id` - Update comment
-- `DELETE /api/v1/comments/:id` - Delete comment
-
-### Notifications
-
-- `GET /api/v1/notifications` - Get user notifications
-- `GET /api/v1/notifications/unread-count` - Get unread count
-- `PUT /api/v1/notifications/mark-all-read` - Mark all as read
-- `PUT /api/v1/notifications/:id/read` - Mark notification as read
-
-### Activity Logs
-
-- `GET /api/v1/activity-logs` - Get activity logs with filtering
-
-## Development Scripts
-
-```bash
-# Development
-npm run start:dev          # Start development server with hot reload
-npm run start:debug        # Start with debug mode
-
-# Building
-npm run build              # Build for production
-npm run start:prod         # Start production server
-
-# Testing
-npm run test               # Run unit tests
-npm run test:watch         # Run tests in watch mode
-npm run test:cov           # Run tests with coverage
-npm run test:e2e           # Run end-to-end tests
-
-# Code Quality
-npm run lint               # Lint and fix code
-npm run format             # Format code with Prettier
-
-# Database
-npm run typeorm:migration:generate -- MigrationName  # Generate migration
-npm run typeorm:migration:run                        # Run migrations
-npm run typeorm:migration:revert                     # Revert last migration
-```
-
-## Deployment
-
-### Vercel Deployment
-
-1. Install Vercel CLI:
+애플리케이션은 Vercel 서버리스 배포용으로 구성되어 있습니다.
 
 ```bash
 npm install -g vercel
-```
-
-2. Configure environment variables in Vercel dashboard
-
-3. Deploy:
-
-```bash
 vercel --prod
 ```
 
-### Environment-specific Configuration
+## 🤝 기여하기
 
-- **Development**: Uses `synchronize: true` for automatic schema updates
-- **Production**: Uses migrations for safe schema changes
-- **Vercel**: Configured as serverless functions with optimized cold start
+1. 저장소 포크
+2. 기능 브랜치 생성 (`git checkout -b feature/amazing-feature`)
+3. 변경사항 커밋 (`git commit -m 'Add amazing feature'`)
+4. 브랜치에 푸시 (`git push origin feature/amazing-feature`)
+5. Pull Request 생성
 
-## Contributing
+### 개발 가이드라인
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes following the established patterns
-4. Add tests for new functionality
-5. Update documentation as needed
-6. Submit a pull request
+- Clean Architecture 원칙 준수
+- 포괄적인 테스트 작성
+- Swagger 문서 업데이트
+- TypeScript 모범 사례 준수
+- 컨벤셔널 커밋 사용
 
-## API Documentation
+## 📄 라이선스
 
-Complete API documentation is available via Swagger UI at `/api/docs` when the server is running.
+이 프로젝트는 MIT 라이센스로 라이센스됩니다 - 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 
-The documentation includes:
+## 🆘 지원
 
-- All endpoint descriptions and examples
-- Request/response schemas
-- Authentication requirements
-- Error responses
-- Try-it-out functionality
+지원 및 질문:
 
-## Architecture Decisions
+- GitHub 저장소에 이슈 생성
+- `/api/docs`에서 API 문서 확인
+- 사용 예제는 테스트 케이스 검토
 
-### Clean Architecture Benefits
+## 🚀 로드맵
 
-- **Testability**: Business logic is independent of frameworks
-- **Maintainability**: Clear separation of concerns
-- **Flexibility**: Easy to swap implementations
-- **Scalability**: Well-organized code structure
+- [ ] WebSocket을 사용한 실시간 협업
+- [ ] 파일 첨부 시스템
+- [ ] 고급 리포팅 및 분석
+- [ ] 모바일 앱 API 최적화
+- [ ] GraphQL API 지원
+- [ ] 고급 검색 및 필터링
+- [ ] 통합을 위한 웹훅 시스템
 
-### Key Patterns Used
+---
 
-- **Repository Pattern**: Data access abstraction
-- **UseCase Pattern**: Single responsibility business operations
-- **DTO Pattern**: Data transfer and validation
-- **Dependency Injection**: Loose coupling between components
-
-## License
-
-This project is licensed under the MIT License.
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-# task-flow-backend
-
-#   T e m p l a t e R e p o s i t o r y 
- 
- 
+<div align="center">
+  <h3>🌟 NestJS 정보</h3>
+  
+  <p>Nest는 MIT 라이센스 오픈 소스 프로젝트입니다. 놀라운 후원자들의 지원으로 성장할 수 있습니다.</p>
+  
+  <p>
+    <strong>연락처</strong><br>
+    Author - <a href="https://twitter.com/kammysliwiec">Kamil Myśliwiec</a><br>
+    Website - <a href="https://nestjs.com">https://nestjs.com</a><br>
+    Twitter - <a href="https://twitter.com/nestframework">@nestframework</a>
+  </p>
+</div>
