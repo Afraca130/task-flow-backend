@@ -20,7 +20,6 @@ import { JwtAuthGuard } from '../src/common/guards/jwt-auth.guard';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { RolesGuard } from '../src/common/guards/role.guard';
 import { ErrorInterceptor } from '../src/common/interceptors/error.interceptor';
-import * as dtos from '../src/common/dtos';
 import { Reflector } from '@nestjs/core';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
@@ -50,7 +49,7 @@ async function createNestApp(): Promise<NestExpressApplication> {
 
         // Swagger 설정 (개발 환경에서만)
         if (process.env.NODE_ENV !== 'production') {
-            setupSwagger(app, Object.values(dtos));
+            setupSwagger(app);
         }
 
         // 전역 프리픽스 설정 (Vercel에서는 /api가 자동으로 붙음)

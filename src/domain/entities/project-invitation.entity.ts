@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Base } from '@src/common/entity/base.entity';
 import { InvitationStatus } from '@src/common/enums/invitation-status.enum';
 import { Project } from './project.entity';

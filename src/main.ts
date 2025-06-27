@@ -8,7 +8,6 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { RolesGuard } from './common/guards/role.guard';
 import { ErrorInterceptor } from './common/interceptors/error.interceptor';
-import * as dtos from './common/dtos';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -32,7 +31,9 @@ async function bootstrap() {
     );
 
     // Swagger 설정 (로컬 개발환경에서만)
-    setupSwagger(app, Object.values(dtos));
+    if (process.env.NODE_ENV !== 'production') {
+        setupSwagger(app);
+    }
 
     // 전역 프리픽스 설정
     const apiPrefix = process.env.API_PREFIX ?? 'v1';

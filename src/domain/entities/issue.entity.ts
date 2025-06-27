@@ -1,13 +1,10 @@
-import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Base } from '@src/common/entity/base.entity';
 import { IssueType } from '@src/common/enums/issue-type.enum';
 import { User } from './user.entity';
 import { Project } from './project.entity';
 
 @Entity('issues')
-@Index(['projectId', 'type'])
-@Index(['authorId'])
-@Index(['projectId', 'createdAt'])
 export class Issue extends Base {
     @Column({ type: 'varchar', length: 255 })
     title: string;

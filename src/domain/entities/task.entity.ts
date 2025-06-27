@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn, Index, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Base } from '@src/common/entity/base.entity';
 import { TaskStatus } from '@src/common/enums/task-status.enum';
 import { TaskPriority } from '@src/common/enums/task-priority.enum';

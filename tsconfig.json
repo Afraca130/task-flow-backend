@@ -24,6 +24,18 @@
             "@common/*": ["src/common/*"]
         }
     },
-    "include": ["src/**/*", "src/common/**/*", "src/common"],
+    "include": [
+        "src/**/*",
+        "src/common/**/*",
+        "src/common",
+        "test/task/task.service.spec.ts",
+        "test/notification/notification.service.spec.ts",
+        "test/invitation/invitation.service.spec.ts",
+        "test/comment/comment.service.spec.ts",
+        "test/auth/auth.service.spec.ts",
+        "test/project/project.service.spec.ts",
+        "test/project-member.service.spec.ts",
+        "test/user/user.service.spec.ts"
+    ],
     "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

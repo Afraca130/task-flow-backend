@@ -40,7 +40,7 @@ export class DomainCommentService extends BaseService<Comment> {
         return this.commentRepository.findByIdWithRelations(commentId, options);
     }
 
-    async updateComment(commentId: string, content: string, options?: IRepositoryOptions<Comment>): Promise<Comment> {
+    async updateComment(commentId: string, content: string, options?: IRepositoryOptions<Comment>) {
         return this.update(commentId, { content }, options);
     }
 

@@ -1,10 +1,8 @@
-import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Base } from '@src/common/entity/base.entity';
 import { User } from './user.entity';
 
 @Entity('notifications')
-@Index(['userId', 'isRead'])
-@Index(['userId', 'createdAt'])
 export class Notification extends Base {
     @Column({ name: 'user_id', type: 'uuid' })
     userId: string;

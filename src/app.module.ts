@@ -15,37 +15,7 @@ import { NotificationModule } from './application/notification/notification.modu
 import { IssueModule } from './application/issue/issue.module';
 import { ActivityLogModule } from './application/activity-log/activity-log.module';
 import { UserModule } from './application/user/user.module';
-
-// 안전한 컨트롤러 로딩 함수
-function safeLoadController(controllerPath: string, controllerName: string) {
-    try {
-        const controller = require(controllerPath)[controllerName];
-        if (controller && controller.name) {
-            console.log(`✅ ${controllerName} loaded successfully`);
-            return controller;
-        } else {
-            console.warn(`⚠️ ${controllerName} is undefined or invalid`);
-            return null;
-        }
-    } catch (error) {
-        console.error(`❌ Failed to load ${controllerName}:`, error.message);
-        return null;
-    }
-}
-
-// 컨트롤러들을 안전하게 로딩
-const controllers = [
-    safeLoadController('./application/user/controllers/user.controller', 'UserController'),
-    safeLoadController('./application/project/controllers/project.controller', 'ProjectController'),
-    safeLoadController('./application/task/controllers/task.controller', 'TaskController'),
-    safeLoadController('./application/comment/controllers/comment.controller', 'CommentController'),
-    safeLoadController('./application/invitation/controllers/invitation.controller', 'InvitationController'),
-    safeLoadController('./application/project-member/controllers/project-member.controller', 'ProjectMemberController'),
-    safeLoadController('./application/notification/controllers/notification.controller', 'NotificationController'),
-    safeLoadController('./application/issue/controllers/issue.controller', 'IssueController'),
-    safeLoadController('./application/activity-log/controllers/activity-log.controller', 'ActivityLogController'),
-    // ... 기타 컨트롤러들
-].filter(Boolean); // null/undefined 제거
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
     imports: [
@@ -59,6 +29,26 @@ const controllers = [
             useFactory: (configService: ConfigService) => typeOrmConfig(configService),
             inject: [ConfigService],
         }),
+
+        // Rate limit
+        ThrottlerModule.forRoot([
+            {
+                name: 'short',
+                ttl: 1000, // 1초 (밀리초 단위)
+                limit: 3, // 초당 3회
+            },
+            {
+                name: 'medium',
+                ttl: 10000, // 10초
+                limit: 20, // 10초당 20회
+            },
+            {
+                name: 'long',
+                ttl: 60000, // 1분
+                limit: 100, // 분당 100회
+            },
+        ]),
+
         TerminusModule,
         AuthModule,
         UserModule,

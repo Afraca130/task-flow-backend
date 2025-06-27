@@ -3,7 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BaseResponseDto } from '../dtos/response.dto';
 import { PaginationData } from '../dtos/paginate-response.dto';
 
-export function setupSwagger(app: INestApplication, dtos: any[]) {
+export function setupSwagger(app: INestApplication) {
     const config = new DocumentBuilder()
         .setTitle('Resource Management API')
         .setDescription('Resource Management API Description')
@@ -12,7 +12,7 @@ export function setupSwagger(app: INestApplication, dtos: any[]) {
         .build();
 
     const document = SwaggerModule.createDocument(app, config, {
-        extraModels: [BaseResponseDto, PaginationData, ...dtos],
+        extraModels: [BaseResponseDto, PaginationData],
     });
 
     SwaggerModule.setup('api-docs', app, document, {
