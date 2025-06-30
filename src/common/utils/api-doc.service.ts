@@ -10,7 +10,7 @@ export class ApiDocService {
 
     constructor() {
         if (process.env.NODE_ENV === 'local') {
-            this.generateApiDocs();
+            // this.generateApiDocs();
         }
     }
 
