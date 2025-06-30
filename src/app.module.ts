@@ -16,6 +16,7 @@ import { IssueModule } from './application/issue/issue.module';
 import { ActivityLogModule } from './application/activity-log/activity-log.module';
 import { UserModule } from './application/user/user.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ApiDocService } from './common/utils/api-doc.service';
 
 @Module({
     imports: [
@@ -48,7 +49,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
                 limit: 100, // 분당 100회
             },
         ]),
-
         TerminusModule,
         AuthModule,
         UserModule,
@@ -62,6 +62,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
         ActivityLogModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, ApiDocService],
 })
 export class AppModule {}

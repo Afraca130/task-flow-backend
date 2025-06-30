@@ -10,7 +10,7 @@ export class ApiDocService {
 
     constructor() {
         if (process.env.NODE_ENV === 'local') {
-            // this.generateApiDocs();
+            this.generateApiDocs();
         }
     }
 
@@ -21,7 +21,7 @@ export class ApiDocService {
     async getApiJson(retries = this.MAX_RETRIES) {
         await new Promise((resolve) => setTimeout(resolve, this.RETRY_DELAY));
         try {
-            const response = await axios.get('http://localhost:3060/api-docs-json');
+            const response = await axios.get('http://localhost:3001/api-docs-json');
             this.data = response.data;
         } catch (error) {
             if (retries > 0) {
@@ -32,8 +32,7 @@ export class ApiDocService {
 
     private getControllers() {
         // v1 API 경로만 필터링
-        const v1Paths = Object.entries(this.data.paths).filter(([path]) => path.startsWith('/api/v1/'));
-
+        const v1Paths = Object.entries(this.data.paths);
         return v1Paths
             .map(([path, routes]) => {
                 // v1 이후의 경로에서 admin 여부 확인
@@ -259,7 +258,7 @@ export class ApiDocService {
                     let markdownContent = `# ${apiType} ${controllerName[0].toUpperCase() + controllerName.slice(1)}\n\n`;
                     // markdownContent += `## ${controller} \n\n`;
                     const domain = controllers[controller];
-
+                    console.log('domain', domain);
                     for (const api of domain) {
                         try {
                             const method = api.method.toUpperCase();
@@ -393,7 +392,7 @@ export class ApiDocService {
                     // 파일명에 관리자/사용자 API 구분을 표시
                     const filePrefix = isAdmin ? 'admin_' : '';
                     const docsPath = join(
-                        'C:/Users/USER/Desktop/projects/RMS-documents/docs/개발/03_api',
+                        'C:/Users/T20030/Documents/Workspace/SubProject/TaskFlowBackend/docs/03_api',
                         `${index + 1 < 10 ? '0' : ''}${index + 1}_${filePrefix}${controllerName}.md`,
                     );
                     this.saveMarkdown(docsPath, markdownContent);
